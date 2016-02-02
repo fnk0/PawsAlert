@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/ic_paw_print"
+            android:title="@string/home"/>
+
+        <item
+            android:id="@+id/donate"
+            android:icon="@drawable/ic_donate"
+            android:title="@string/donate"/>
+
+        <item
+            android:id="@+id/foster"
+            android:icon="@drawable/ic_action_home"
+            android:title="@string/foster"/>
+
+        <item
+            android:id="@+id/volunteer"
+            android:icon="@drawable/ic_volunteer"
+            android:title="@string/volunteer"/>
+
+        <item
+            android:id="@+id/stories"
+            android:icon="@drawable/ic_book"
+            android:title="@string/success_stories"/>
+
+        <item
+            android:id="@+id/about"
+            android:icon="@drawable/ic_action_info"
+            android:title="@string/about"/>
+
+        <item
+            android:id="@+id/sign_in_out"
+            android:icon="@drawable/ic_exit"
+            android:title="@string/sign_in"/>
+    </group>
+</menu>

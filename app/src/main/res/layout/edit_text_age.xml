@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.TextInputLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="8dp"
+    tools:showIn="@layout/activity_add"
+    android:orientation="horizontal">
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/petAge"
+        android:drawableLeft="@drawable/ic_time"
+        android:drawablePadding="16dp"
+        android:hint="Age"
+        android:background="@android:color/transparent"
+        android:textSize="20sp"
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</android.support.design.widget.TextInputLayout>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<info.hoang8f.android.segmented.SegmentedGroup
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/segment_gender"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:orientation="horizontal"
+    app:sc_tint_color="@color/teal_300"
+    tools:showIn="@layout/activity_add"
+    >
+
+    <RadioButton
+        android:id="@+id/male"
+        android:text="@string/male"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:drawableLeft="@drawable/ic_male"
+        style="@style/RadioButton"
+        />
+
+    <RadioButton
+        android:id="@+id/female"
+        android:text="@string/female"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/ic_female"
+        style="@style/RadioButton"
+        />
+
+</info.hoang8f.android.segmented.SegmentedGroup>

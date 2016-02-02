@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<info.hoang8f.android.segmented.SegmentedGroup
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/segment_missing"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:orientation="horizontal"
+    app:sc_tint_color="@color/accent_color"
+    tools:showIn="@layout/activity_add"
+    >
+
+    <RadioButton
+        android:id="@+id/missing"
+        android:text="@string/missing"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        style="@style/RadioButton"
+        />
+
+    <RadioButton
+        android:id="@+id/adopt"
+        android:text="@string/adopt"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        style="@style/RadioButton"
+        />
+
+
+</info.hoang8f.android.segmented.SegmentedGroup>
