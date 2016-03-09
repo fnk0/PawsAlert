@@ -1,6 +1,7 @@
 package com.gabilheri.pawsalert.data.models;
 
 import com.gabilheri.pawsalert.base.BaseParseClass;
+import com.parse.ParseClassName;
 import com.parse.ParseQuery;
 
 /**
@@ -10,25 +11,31 @@ import com.parse.ParseQuery;
  * @version 1.0
  * @since 1/20/16.
  */
+@ParseClassName("Favorite")
 public class Favorite extends BaseParseClass<Favorite> {
 
     Animal animal;
     User user;
 
+    public Favorite() {
+    }
+
     public Animal getAnimal() {
         return animal;
     }
 
-    public void setAnimal(Animal animal) {
+    public Favorite setAnimal(Animal animal) {
         this.animal = animal;
+        return this;
     }
 
     public User getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public Favorite setUser(User user) {
         this.user = user;
+        return this;
     }
 
     @Override
@@ -36,7 +43,7 @@ public class Favorite extends BaseParseClass<Favorite> {
         return this;
     }
 
-    public static ParseQuery getQuery() {
-        return ParseQuery.getQuery("Favorite");
+    public static ParseQuery<Favorite> getQuery() {
+        return ParseQuery.getQuery(Favorite.class);
     }
 }

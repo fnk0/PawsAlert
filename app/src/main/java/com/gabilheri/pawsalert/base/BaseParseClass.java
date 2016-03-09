@@ -13,7 +13,7 @@ import timber.log.Timber;
  * @version 1.0
  * @since 1/19/16.
  */
-public abstract class BaseParseClass<T> {
+public abstract class BaseParseClass<T> extends ParseObject {
 
     public abstract T instance();
 
@@ -21,6 +21,9 @@ public abstract class BaseParseClass<T> {
         T obj = instance();
         Field[] fields = getClass().getDeclaredFields();
         for (Field f : fields) {
+            if (f.isAnnotationPresent(Skip.class)) {
+                continue;
+            }
             f.setAccessible(true);
             try {
                 f.set(obj, po.get(f.getName()));
@@ -28,22 +31,23 @@ public abstract class BaseParseClass<T> {
                 throwFieldException(ex, f);
             }
         }
+
         return obj;
     }
 
-    public static ParseObject toParseObject(Object obj, Class clazz) {
-        ParseObject parseObject = ParseObject.create(clazz.getName());
-
+    public BaseParseClass<T> toParseObject(Object obj) {
         for (Field f : obj.getClass().getDeclaredFields()) {
             f.setAccessible(true);
             try {
-                parseObject.put(f.getName(), f.get(obj));
+                Object val = f.get(obj);
+                if (val != null) {
+                    put(f.getName(), val);
+                }
             } catch (IllegalAccessException ex) {
                 throwFieldException(ex, f);
             }
         }
-
-        return parseObject;
+        return this;
     }
 
     public static void throwFieldException(Exception ex, Field f) {

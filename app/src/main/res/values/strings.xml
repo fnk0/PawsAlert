@@ -16,6 +16,19 @@
     <string name="adopt">Adopt</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
+    <string name="age">Age</string>
+    <string name="select_location">Select location</string>
+    <string name="what_kind">What kind?</string>
+    <string name="cat">Cat</string>
+    <string name="dog">Dog</string>
+    <string name="other">Other</string>
+    <string name="details">Details</string>
+    <string name="create_listing">Create Listing</string>
+    <string name="has_microchip">Has Microchip?</string>
+    <string name="is_neutered">Is Neutered?</string>
+    <string name="add_photos">Add Photos</string>
+    <string name="has_vaccinations">Has Vaccinations?</string>
+    <string name="location">Location</string>
 
 
     <array name="genders">
@@ -23,5 +36,23 @@
         <item>Female</item>
         <item>Other</item>
     </array>
+
+    <string name="loren_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec fermentum nulla, pellentesque ultrices ligula. Etiam luctus facilisis congue. Sed lacus elit, venenatis eu blandit id, lacinia non felis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Proin gravida lobortis lacus vitae porttitor. In nec risus ut metus laoreet luctus eget nec felis. Nunc viverra pellentesque elementum.</string>
+    <string name="petImage">petImage</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="share">Share</string>
+    <string name="create_account">Create Account</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="first_name_last_name">First Name + Last Name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="favorites">Favorites</string>
+    <string name="invalid_email">Invalid Email</string>
+    <string name="password_number">Password must have at least 1 number</string>
+    <string name="password_min_chars">Password must be at least 6 characters.</string>
+    <string name="phone_number_error">Phone number must be at least 9 digits.</string>
+    <string name="passwords_match">Passwords don\'t match.</string>
 
 </resources>

@@ -4,26 +4,50 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbar"
+    style="@style/Theme.Paws.Base.HeaderBar"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
+    android:layout_height="wrap_content"
     android:background="?attr/colorPrimary"
     app:layout_scrollFlags="scroll|enterAlways"
-    style="@style/Theme.Paws.Base.HeaderBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     app:theme="@style/Theme.Paws.Base.ActionBarThemeOverlay"
     >
 
-    <android.support.v7.widget.AppCompatEditText
-        android:id="@+id/edit_text"
-        tools:hint="Pet Name"
-        android:textColor="@color/grey_100"
-        android:textColorHint="@color/grey_300"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        android:textSize="20sp"
-        android:padding="8dp"
-        android:gravity="center_vertical"
-        />
+        android:layout_height="wrap_content"
+        android:paddingRight="8dp"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/spaceSize"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/createListing"
+            android:layout_alignParentRight="true"
+            android:background="?android:selectableItemBackground"
+            android:text="@string/create_listing"
+            android:textColor="@color/grey_200"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_text"
+            android:layout_below="@id/spaceSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:padding="8dp"
+            android:textColor="@color/grey_100"
+            android:textColorHint="@color/grey_300"
+            android:textSize="20sp"
+            tools:hint="Pet Name"
+            />
+
+
+    </RelativeLayout>
 
 </android.support.v7.widget.Toolbar>

@@ -4,10 +4,14 @@ import android.support.annotation.DrawableRes;
 
 import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.base.BaseParseClass;
+import com.gabilheri.pawsalert.base.Skip;
+import com.gabilheri.pawsalert.helpers.Const;
+import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,19 +21,13 @@ import java.util.List;
  * @version 1.0
  * @since 1/18/16.
  */
+@ParseClassName("Animal")
 public class Animal extends BaseParseClass<Animal> {
-
-    public static final String MALE = "Male";
-    public static final String FEMALE = "Female";
-    public static final String DOG = "Dog";
-    public static final String CAT = "Cat";
 
     String name;
     String petType;
     String gender;
     int age;
-    List<String> markings;
-    boolean isPuppy;
     boolean microchip;
     boolean vaccinations;
     boolean missing;
@@ -40,6 +38,9 @@ public class Animal extends BaseParseClass<Animal> {
     String size;
     List<ParseFile> photos;
     User user;
+
+    @Skip
+    boolean isFavorite;
 
     public String getName() {
         return name;
@@ -71,14 +72,6 @@ public class Animal extends BaseParseClass<Animal> {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public List<String> getMarkings() {
-        return markings;
-    }
-
-    public void setMarkings(List<String> markings) {
-        this.markings = markings;
     }
 
     public boolean hasMicrochip() {
@@ -145,20 +138,19 @@ public class Animal extends BaseParseClass<Animal> {
         this.size = size;
     }
 
-    public boolean isPuppy() {
-        return isPuppy;
-    }
-
-    public void setPuppy(boolean puppy) {
-        isPuppy = puppy;
-    }
-
     public List<ParseFile> getPhotos() {
         return photos;
     }
 
     public void setPhotos(List<ParseFile> photos) {
         this.photos = photos;
+    }
+
+    public void addPhoto(ParseFile f) {
+        if (photos == null) {
+            photos = new ArrayList<>();
+        }
+        photos.add(f);
     }
 
     public User getUser() {
@@ -171,9 +163,9 @@ public class Animal extends BaseParseClass<Animal> {
 
     public static @DrawableRes int getDrawableForType(String type) {
         switch (type) {
-            case CAT:
+            case Const.CAT:
                 return R.drawable.ic_cat;
-            case DOG:
+            case Const.DOG:
                 return R.drawable.ic_dog;
             default:
                 throw new InvalidParameterException("Could not find animal of type: " + type);
@@ -182,17 +174,26 @@ public class Animal extends BaseParseClass<Animal> {
 
     public static @DrawableRes int getDrawableForGender(String gender) {
         switch (gender) {
-            case MALE:
+            case Const.MALE:
                 return R.drawable.ic_male;
-            case FEMALE:
+            case Const.FEMALE:
                 return R.drawable.ic_female;
             default:
                 throw new InvalidParameterException("Could not find gender: " + gender);
         }
     }
 
-    public static ParseQuery getQuery() {
-        return ParseQuery.getQuery("Animal");
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public Animal setFavorite(boolean favorite) {
+        isFavorite = favorite;
+        return this;
+    }
+
+    public static ParseQuery<Animal> getQuery() {
+        return ParseQuery.getQuery(Animal.class);
     }
 
     @Override

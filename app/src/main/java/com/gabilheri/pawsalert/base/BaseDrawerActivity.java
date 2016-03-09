@@ -3,14 +3,23 @@ package com.gabilheri.pawsalert.base;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.AppCompatTextView;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.gabilheri.pawsalert.R;
+import com.gabilheri.pawsalert.data.models.User;
+import com.gabilheri.pawsalert.ui.home.HomeActivity;
+import com.gabilheri.pawsalert.ui.sign_in.SignInActivity;
+import com.parse.ParseUser;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by <a href="mailto:marcusandreog@gmail.com">Marcus Gabilheri</a>
@@ -20,10 +29,15 @@ import butterknife.Bind;
  * @since 1/17/16.
  */
 public abstract class BaseDrawerActivity extends BaseActivity implements View.OnClickListener,
-        SharedPreferences.OnSharedPreferenceChangeListener, DrawerLayout.DrawerListener {
+        SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener {
 
     @Bind(R.id.drawer_layout)
     protected DrawerLayout mDrawerLayout;
+
+    @Bind(R.id.nav_view)
+    protected NavigationView mNavigationView;
+
+    protected User mCurrentUser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,28 +47,8 @@ public abstract class BaseDrawerActivity extends BaseActivity implements View.On
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        mDrawerLayout.setDrawerListener(this);
+        mCurrentUser = (User) ParseUser.getCurrentUser();
         setupDrawerContent();
-    }
-
-    @Override
-    public void onDrawerSlide(View drawerView, float slideOffset) {
-
-    }
-
-    @Override
-    public void onDrawerOpened(View drawerView) {
-
-    }
-
-    @Override
-    public void onDrawerClosed(View drawerView) {
-
-    }
-
-    @Override
-    public void onDrawerStateChanged(int newState) {
-
     }
 
     @Override
@@ -75,7 +69,36 @@ public abstract class BaseDrawerActivity extends BaseActivity implements View.On
     }
 
     private void setupDrawerContent() {
+        mNavigationView.setNavigationItemSelectedListener(this);
+        if (mCurrentUser != null) {
+            RelativeLayout navHeader = (RelativeLayout) mNavigationView.getHeaderView(0);
+            AppCompatTextView nameTv = ButterKnife.findById(navHeader, R.id.headerName);
+            nameTv.setText(mCurrentUser.getFullName());
 
+            Menu menu = mNavigationView.getMenu();
+            int size = menu.size();
+
+            for(int i = 0; i < size; i++) {
+                MenuItem item = menu.getItem(i);
+                if (item.getItemId() == R.id.sign_in_out) {
+                    item.setTitle(R.string.sign_out);
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sign_in_out:
+                startActivity(new Intent(this, SignInActivity.class));
+                return true;
+            case R.id.home:
+                startActivity(new Intent(this, HomeActivity.class));
+                return true;
+            default:
+                return false;
+        }
     }
 
     @Override

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<info.hoang8f.android.segmented.SegmentedGroup
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/segment_size"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:orientation="horizontal"
+    app:sc_tint_color="@color/teal_300"
+    tools:showIn="@layout/activity_add"
+    >
+
+    <RadioButton
+        android:id="@+id/small"
+        android:text="Small"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:drawableTop="@drawable/ic_small"
+        android:checked="true"
+        android:padding="8dp"
+        style="@style/RadioButton"
+        />
+
+    <RadioButton
+        android:id="@+id/medium"
+        android:text="Medium"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:drawableTop="@drawable/ic_medium"
+        android:padding="8dp"
+        style="@style/RadioButton"
+        />
+
+    <RadioButton
+        android:id="@+id/large"
+        android:text="Large"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:drawableTop="@drawable/ic_large"
+        android:padding="8dp"
+        style="@style/RadioButton"
+        />
+
+    <RadioButton
+        android:id="@+id/very_large"
+        android:text="Very Large"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:drawableTop="@drawable/ic_very_large"
+        android:padding="8dp"
+        style="@style/RadioButton"
+        />
+
+</info.hoang8f.android.segmented.SegmentedGroup>

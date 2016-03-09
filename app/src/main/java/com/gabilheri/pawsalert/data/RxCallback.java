@@ -8,6 +8,7 @@ package com.gabilheri.pawsalert.data;
  * @since 1/19/16.
  */
 public interface RxCallback<T> {
+    void onNext(T data);
     void onDataReady(T data);
     void onDataError(Throwable e);
 }

@@ -31,7 +31,8 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
 
     public void add(T element) {
         mElements.add(element);
-        notifyItemInserted(getItemCount() - 1);
+//        notifyItemInserted(getItemCount() - 1);
+        notifyDataSetChanged();
     }
 
     public void addAll(List<T> elements) {

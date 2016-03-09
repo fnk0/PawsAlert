@@ -2,6 +2,8 @@ package com.gabilheri.pawsalert.data.models;
 
 import com.parse.ParseUser;
 
+import java.util.Locale;
+
 /**
  * Created by <a href="mailto:marcus@gabilheri.com">Marcus Gabilheri</a>
  *
@@ -13,7 +15,9 @@ public class User extends ParseUser {
 
     public static final String FIRST_NAME = "firstName";
     public static final String LAST_NAME = "lastName";
-    public static final String CONTACT_INFO = "contactInfo";
+    public static final String PHONE_NUMBER = "phoneNumber";
+
+    String phoneNumber;
 
     public String getLastName() {
         return getString(LAST_NAME);
@@ -31,11 +35,26 @@ public class User extends ParseUser {
         put(FIRST_NAME, firstName);
     }
 
-    public ContactInfo getContactInfo() {
-        return (ContactInfo) get(CONTACT_INFO);
+    public String getPhoneNumber() {
+        return getString(PHONE_NUMBER);
     }
 
-    public void setContactInfo(ContactInfo contactInfo) {
-        put(CONTACT_INFO, contactInfo);
+    public User setPhoneNumber(String phoneNumber) {
+        put(PHONE_NUMBER, phoneNumber);
+        return this;
     }
+
+    public void setFullName(String fullName) {
+        String[] fArray = fullName.split(" ");
+        if (fArray.length != 2) {
+            return;
+        }
+        setFirstName(fArray[0]);
+        setLastName(fArray[1]);
+    }
+
+    public String getFullName() {
+        return String.format(Locale.getDefault(), "%s %s", getFirstName(), getLastName());
+    }
+
 }

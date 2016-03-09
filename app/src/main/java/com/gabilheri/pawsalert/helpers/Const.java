@@ -33,4 +33,33 @@ public final class Const {
      */
     public static final String IMAGE_DIRECTORY_NAME = "Paws";
     public static final String CANOPEO_TEMP = "paws_temp";
+
+    /**
+     * Animal Class
+     */
+    public static final String MALE = "Male";
+    public static final String FEMALE = "Female";
+    public static final String DOG = "Dog";
+    public static final String CAT = "Cat";
+
+    /**
+     *
+     */
+    public static final String OBJECT_ID = "objectId";
+    public static final String PET_IMAGE = "petImage";
+    public static final String TRANSITION_LAYOUT = "revealTransition";
+
+    /**
+     * Validation
+     */
+    public static final String EMAIL_REGEX = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+    public static final int MIN_PASSWORD_SIZE = 6;
+    public static final int MIN_PASSWORD_NUMBERS = 1;
+
+    /**
+     * Item Callback States
+     */
+    public static final int ANIMAL_FAVORITE = 785;
+    public static final int ANIMAL_OPEN = 786;
+    public static final int ANIMAL_SHARE = 787;
 }

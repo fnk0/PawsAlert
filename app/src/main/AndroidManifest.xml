@@ -8,7 +8,11 @@
     <!-- Permission to check if there is internet available or not -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
-    <application android:allowBackup="true"
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+    <application
+        android:name=".PawsApp"
+        android:allowBackup="true"
         android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher"
         android:supportsRtl="true"
@@ -21,9 +25,17 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ui.add.AddPetActivity"
-            />
+        <activity android:name=".ui.add.AddPetActivity" />
+
+        <activity android:name=".ui.details.ActivityDetails" />
+
+        <activity android:name=".ui.sign_in.SignInActivity" />
+
+        <activity android:name=".ui.sign_in.SignUpActivity" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBC0RDlSjm2O4P_kFUEzLPp3cQz2LKdM7s"/>
 
 
     </application>

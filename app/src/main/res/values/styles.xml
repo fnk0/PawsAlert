@@ -31,8 +31,14 @@
         <item name="colorControlHighlight">#3fff</item>
     </style>
 
-    <style name="ColorSwitchOrange">
-        <item name="colorControlActivated">@color/orange_600</item>
+    <style name="ColorSwitchTeal">
+        <item name="colorControlActivated">@color/teal_500</item>
+    </style>
+
+    <style name="EditTextWhite">
+        <item name="colorControlNormal">@color/grey_200</item>
+        <item name="colorControlActivated">@color/grey_200</item>
+        <item name="colorControlHighlight">@color/grey_200</item>
     </style>
 
 

@@ -29,8 +29,10 @@ public class RxSubscriber<T> extends Subscriber<T> {
         mRxCallback.onDataError(e);
     }
 
+
+
     @Override
     public void onNext(T t) {
-        mRxCallback.onDataReady(t);
+        mRxCallback.onNext(t);
     }
 }

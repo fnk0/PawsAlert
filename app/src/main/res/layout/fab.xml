@@ -13,8 +13,10 @@
     android:animateLayoutChanges="true"
     android:src="@drawable/ic_content_add"
     app:backgroundTint="@color/primary"
+    app:layout_behavior="com.gabilheri.pawsalert.ui.animations.ScrollAwareBehavior"
     app:borderWidth="0dp"
     app:elevation="6dp"
+    android:transitionName="revealTransition"
     app:rippleColor="@color/white_light_grey"
     android:visibility="gone"
 />

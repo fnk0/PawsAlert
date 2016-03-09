@@ -12,10 +12,13 @@
         android:id="@+id/petAge"
         android:drawableLeft="@drawable/ic_time"
         android:drawablePadding="16dp"
-        android:hint="Age"
+        android:hint="@string/age"
         android:background="@android:color/transparent"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:textSize="20sp"
         android:inputType="number"
+        android:layout_marginBottom="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

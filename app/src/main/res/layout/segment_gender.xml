@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:drawableLeft="@drawable/ic_male"
+        android:checked="true"
         style="@style/RadioButton"
         />
 
