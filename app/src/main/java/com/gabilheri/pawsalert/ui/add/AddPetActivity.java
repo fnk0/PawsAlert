@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.SwitchCompat;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.bumptech.glide.Glide;
 import com.canelmas.let.AskPermission;
@@ -57,7 +59,8 @@ import timber.log.Timber;
  * @version 1.0
  * @since 1/20/16.
  */
-public class AddPetActivity extends BaseActivity implements OnMapReadyCallback {
+public class AddPetActivity extends BaseActivity
+        implements OnMapReadyCallback, RadioGroup.OnCheckedChangeListener {
 
     int PLACE_PICKER_REQUEST = 1498;
     int PHOTO_PICKER_REQUEST = 1499;
@@ -101,6 +104,12 @@ public class AddPetActivity extends BaseActivity implements OnMapReadyCallback {
     @Bind(R.id.photosLayout)
     LinearLayout mPhotosLayout;
 
+    @Bind(R.id.adoptionFeeLayout)
+    TextInputLayout mAdoptionFeeLayout;
+
+    @Bind(R.id.adoptionFee)
+    AppCompatEditText mAdoptionFeeEditText;
+
     LinearLayout mLastLayout;
     LatLng mSelectedLocation;
 
@@ -115,6 +124,7 @@ public class AddPetActivity extends BaseActivity implements OnMapReadyCallback {
         enableActivityTransition();
         mPetNameEditText.setHint(R.string.pet_name);
         mPhotos = new ArrayList<>();
+        mSegmentMissing.setOnCheckedChangeListener(this);
     }
 
     @OnClick(R.id.selectLocation)
@@ -126,6 +136,13 @@ public class AddPetActivity extends BaseActivity implements OnMapReadyCallback {
             e.printStackTrace();
         } catch (GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        if (group.getId() == R.id.segment_missing) {
+            mAdoptionFeeLayout.setVisibility(checkedId == R.id.adopt ? View.VISIBLE : View.GONE);
         }
     }
 

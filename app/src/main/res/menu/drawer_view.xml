@@ -12,9 +12,9 @@
             android:title="@string/donate"/>
 
         <item
-            android:id="@+id/foster"
+            android:id="@+id/shelter"
             android:icon="@drawable/ic_action_home"
-            android:title="@string/foster"/>
+            android:title="@string/shelters"/>
 
         <item
             android:id="@+id/volunteer"

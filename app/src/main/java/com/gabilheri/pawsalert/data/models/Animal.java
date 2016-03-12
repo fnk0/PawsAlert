@@ -34,6 +34,7 @@ public class Animal extends BaseParseClass<Animal> {
     boolean isNeutered;
     double latitude;
     double longitude;
+    double adoptionFee;
     String otherInfo;
     String size;
     List<ParseFile> photos;
@@ -144,6 +145,14 @@ public class Animal extends BaseParseClass<Animal> {
 
     public void setPhotos(List<ParseFile> photos) {
         this.photos = photos;
+    }
+
+    public double getAdoptionFee() {
+        return adoptionFee;
+    }
+
+    public void setAdoptionFee(double adoptionFee) {
+        this.adoptionFee = adoptionFee;
     }
 
     public void addPhoto(ParseFile f) {

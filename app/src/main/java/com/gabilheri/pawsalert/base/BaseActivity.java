@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
+import butterknife.BindColor;
 import butterknife.ButterKnife;
 
 /**
@@ -44,7 +45,9 @@ import butterknife.ButterKnife;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
+    @BindColor(R.color.white_light_grey)
     protected int WHITE_COLOR;
+
     protected FragmentManager mFragmentManager = null;
 
     @Nullable
@@ -75,8 +78,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
 
         ButterKnife.bind(this);
-
-        WHITE_COLOR = getResources().getColor(R.color.white_light_grey);
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);

@@ -15,7 +15,10 @@ import android.widget.RelativeLayout;
 import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.data.models.User;
 import com.gabilheri.pawsalert.ui.home.HomeActivity;
+import com.gabilheri.pawsalert.ui.shelter.ActivityShelters;
 import com.gabilheri.pawsalert.ui.sign_in.SignInActivity;
+import com.parse.LogOutCallback;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import butterknife.Bind;
@@ -29,7 +32,7 @@ import butterknife.ButterKnife;
  * @since 1/17/16.
  */
 public abstract class BaseDrawerActivity extends BaseActivity implements View.OnClickListener,
-        SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener {
+        SharedPreferences.OnSharedPreferenceChangeListener, NavigationView.OnNavigationItemSelectedListener, LogOutCallback {
 
     @Bind(R.id.drawer_layout)
     protected DrawerLayout mDrawerLayout;
@@ -91,13 +94,33 @@ public abstract class BaseDrawerActivity extends BaseActivity implements View.On
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sign_in_out:
-                startActivity(new Intent(this, SignInActivity.class));
+                if (mCurrentUser != null) {
+                    ParseUser.logOutInBackground(this);
+                } else {
+                    startActivity(new Intent(this, SignInActivity.class));
+                }
                 return true;
+
             case R.id.home:
                 startActivity(new Intent(this, HomeActivity.class));
                 return true;
+
+            case R.id.shelter:
+                startActivity(new Intent(this, ActivityShelters.class));
+                return true;
+
             default:
                 return false;
+        }
+    }
+
+    @Override
+    public void done(ParseException e) {
+        if (e == null) {
+            Intent i = new Intent(this, HomeActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finishAfterTransition();
         }
     }
 

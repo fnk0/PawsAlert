@@ -33,6 +33,10 @@
 
         <activity android:name=".ui.sign_in.SignUpActivity" />
 
+        <activity android:name=".ui.shelter.ActivityShelters" />
+
+        <activity android:name=".ui.shelter.ActivityAddShelter" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBC0RDlSjm2O4P_kFUEzLPp3cQz2LKdM7s"/>

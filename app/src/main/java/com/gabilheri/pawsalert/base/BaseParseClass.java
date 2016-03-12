@@ -26,9 +26,12 @@ public abstract class BaseParseClass<T> extends ParseObject {
             }
             f.setAccessible(true);
             try {
-                f.set(obj, po.get(f.getName()));
+                Object oj = po.get(f.getName());
+                if (oj != null) {
+                    f.set(obj, oj);
+                }
             } catch (IllegalAccessException ex) {
-                throwFieldException(ex, f);
+                LogFieldException(ex, f);
             }
         }
 
@@ -44,13 +47,13 @@ public abstract class BaseParseClass<T> extends ParseObject {
                     put(f.getName(), val);
                 }
             } catch (IllegalAccessException ex) {
-                throwFieldException(ex, f);
+                LogFieldException(ex, f);
             }
         }
         return this;
     }
 
-    public static void throwFieldException(Exception ex, Field f) {
+    public static void LogFieldException(Exception ex, Field f) {
         Timber.e(ex, "Error setting property: " + f.getName());
     }
 }
