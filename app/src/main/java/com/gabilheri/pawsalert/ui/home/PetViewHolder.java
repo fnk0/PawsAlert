@@ -12,6 +12,7 @@ import com.gabilheri.pawsalert.base.ItemCallback;
 import com.gabilheri.pawsalert.data.models.Animal;
 import com.gabilheri.pawsalert.data.models.TransitionWrapperModel;
 import com.gabilheri.pawsalert.helpers.Const;
+import com.gabilheri.pawsalert.helpers.DateFormatter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -43,6 +44,9 @@ public class PetViewHolder extends RecyclerView.ViewHolder implements View.OnCli
     @Bind(R.id.petName)
     AppCompatTextView mPetName;
 
+    @Bind(R.id.petDate)
+    AppCompatTextView mCreatedAt;
+
     Animal mAnimal;
 
     ItemCallback<TransitionWrapperModel<Animal>> mAnimalItemCallback;
@@ -66,6 +70,7 @@ public class PetViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         mPetName.setText(mAnimal.getName());
         mPetGender.setImageResource(Animal.getDrawableForGender(mAnimal.getGender()));
         mActionFavorite.setImageResource(mAnimal.isFavorite() ? R.drawable.ic_action_favorite_red : R.drawable.ic_action_favorite);
+        mCreatedAt.setText(DateFormatter.prettyFormat(animal.getCreatedAt()));
     }
 
     @Override

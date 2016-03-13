@@ -9,7 +9,7 @@
     android:orientation="horizontal">
 
     <android.support.v7.widget.AppCompatEditText
-        android:id="@+id/petDetails"
+        android:id="@+id/details"
         android:drawableLeft="@drawable/ic_details"
         android:drawablePadding="16dp"
         android:hint="@string/details"

@@ -1,8 +1,5 @@
 package com.gabilheri.pawsalert.ui.details;
 
-import android.Manifest;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.AppCompatImageView;
@@ -10,8 +7,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.canelmas.let.AskPermission;
 import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.base.BaseActivity;
 import com.gabilheri.pawsalert.data.models.Animal;
@@ -26,8 +21,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-
-import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -61,7 +54,7 @@ public class ActivityDetails extends BaseActivity
     @Bind(R.id.isNeutered)
     ImageView mIsNeuteredIV;
 
-    @Bind(R.id.petDetails)
+    @Bind(R.id.details)
     TextView mPetDetailsTV;
 
     @Bind(R.id.map)
@@ -81,8 +74,8 @@ public class ActivityDetails extends BaseActivity
         if (extras != null) {
             pObjectID = extras.getString(Const.OBJECT_ID);
 
-            String pictureUrl = extras.getString(Const.PET_IMAGE);
-            loadImage(pictureUrl);
+            String pictureUrl = extras.getString(Const.IMAGE_EXTRA);
+            loadImage(pictureUrl, mHeaderImageView);
 
             ParseQuery<Animal> query = Animal.getQuery();
             query.include("user");
@@ -93,37 +86,20 @@ public class ActivityDetails extends BaseActivity
         }
     }
 
-    @AskPermission(Manifest.permission.CALL_PHONE)
     @OnClick(R.id.fabCall)
     public void call(View v) {
         if (mAnimal != null) {
-            try {
-                User u = mAnimal.getUser();
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + u.getPhoneNumber()));
-                startActivity(callIntent);
-            } catch (SecurityException ex) {
-                Timber.e(ex, ex.getLocalizedMessage());
-            }
+            User u = mAnimal.getUser();
+            makePhoneCall(u.getPhoneNumber());
         }
-    }
-
-    public void loadImage(String url) {
-        Glide.with(this)
-                .load(url)
-                .into(mHeaderImageView);
     }
 
     @Override
     public void done(Animal object, ParseException e) {
         mAnimal = object.fromParseObject(object);
         mCollapsingToolbarLayout.setTitle(mAnimal.getName());
-        String years = "years";
-        if (mAnimal.getAge() < 2) {
-            years = "year";
-        }
 
-        mPetAgeTV.setText(String.format(Locale.getDefault(), "%d %s", mAnimal.getAge(), years));
+        mPetAgeTV.setText(mAnimal.getAge());
 
         setImage(mIsNeuteredIV, mAnimal.isNeutered());
         setImage(mHasVaccinationsIV, mAnimal.hasVaccinations());

@@ -3,11 +3,11 @@ package com.gabilheri.pawsalert;
 import android.app.Application;
 
 import com.gabilheri.pawsalert.data.models.Animal;
+import com.gabilheri.pawsalert.data.models.AnimalShelter;
 import com.gabilheri.pawsalert.data.models.Favorite;
 import com.gabilheri.pawsalert.data.models.User;
 import com.parse.Parse;
 import com.parse.ParseObject;
-import com.squareup.leakcanary.LeakCanary;
 
 import timber.log.Timber;
 
@@ -25,7 +25,6 @@ public class PawsApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        LeakCanary.install(this);
         Timber.plant(new Timber.DebugTree());
 
         Parse.enableLocalDatastore(this);
@@ -34,6 +33,7 @@ public class PawsApp extends Application {
         ParseObject.registerSubclass(Animal.class);
         ParseObject.registerSubclass(Favorite.class);
         ParseObject.registerSubclass(User.class);
+        ParseObject.registerSubclass(AnimalShelter.class);
         mInstance = this;
     }
 

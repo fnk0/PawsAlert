@@ -6,7 +6,9 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,7 +27,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.helpers.Const;
 
@@ -35,6 +39,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
  * Created by <a href="mailto:marcusandreog@gmail.com">Marcus Gabilheri</a>
@@ -44,6 +49,9 @@ import butterknife.ButterKnife;
  * @since 1/17/16.
  */
 public abstract class BaseActivity extends AppCompatActivity {
+
+    private static final String EXTRA_CUSTOM_TABS_SESSION = "android.support.customtabs.extra.SESSION";
+    private static final String EXTRA_CUSTOM_TABS_TOOLBAR_COLOR = "android.support.customtabs.extra.TOOLBAR_COLOR";
 
     @BindColor(R.color.white_light_grey)
     protected int WHITE_COLOR;
@@ -245,6 +253,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void loadImage(String url, ImageView imageView) {
+        Glide.with(this)
+                .load(url)
+                .into(imageView);
+    }
+
     public void hideKeyboard() {
         // Check if no view has focus:
         View view = this.getCurrentFocus();
@@ -252,6 +266,34 @@ public abstract class BaseActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    public void makePhoneCall(String phoneNumber) {
+        try {
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse("tel:" + phoneNumber));
+            startActivity(callIntent);
+        } catch (SecurityException ex) {
+            Timber.e(ex, ex.getMessage());
+        }
+    }
+
+    public void sendEmail(String email) {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", email, null));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Tiny Paws Email Contact");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "");
+        startActivity(Intent.createChooser(emailIntent, "Send email..."));
+    }
+
+    public void openURL(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            intent.putExtra(EXTRA_CUSTOM_TABS_TOOLBAR_COLOR, getResources().getColor(R.color.primary));
+            Bundle extras = new Bundle();
+            extras.putBinder(EXTRA_CUSTOM_TABS_SESSION, null);
+            intent.putExtras(extras);
+        }
+        startActivity(intent);
     }
 
     @Override

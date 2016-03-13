@@ -9,6 +9,8 @@
     android:layout_alignParentEnd="true"
     android:layout_alignParentRight="true"
     android:layout_gravity="end|bottom"
+    app:layout_anchor="@id/linearContent"
+    app:layout_anchorGravity="bottom|right|end"
     android:layout_margin="16dp"
     android:animateLayoutChanges="true"
     android:src="@drawable/ic_content_add"

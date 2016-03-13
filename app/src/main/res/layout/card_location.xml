@@ -16,7 +16,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/locationTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"

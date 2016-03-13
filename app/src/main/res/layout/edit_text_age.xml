@@ -1,25 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.TextInputLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:padding="8dp"
+    android:orientation="horizontal"
     tools:showIn="@layout/activity_add"
-    android:orientation="horizontal">
+    android:padding="8dp">
 
-    <android.support.v7.widget.AppCompatEditText
-        android:id="@+id/petAge"
-        android:drawableLeft="@drawable/ic_time"
-        android:drawablePadding="16dp"
-        android:hint="@string/age"
-        android:background="@android:color/transparent"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:textSize="20sp"
-        android:inputType="number"
-        android:layout_marginBottom="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        tools:showIn="@layout/activity_add">
 
-</android.support.design.widget.TextInputLayout>
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/petAge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/ic_time"
+            android:drawablePadding="16dp"
+            android:hint="@string/age"
+            android:inputType="numberDecimal"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:textSize="20sp" />
+    </android.support.design.widget.TextInputLayout>
+
+
+    <info.hoang8f.android.segmented.SegmentedGroup
+        android:id="@+id/segmentAge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        app:sc_tint_color="@color/accent_color"
+        tools:showIn="@layout/activity_add">
+
+        <RadioButton
+            android:id="@+id/years"
+            style="@style/RadioButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="Years" />
+
+        <RadioButton
+            android:id="@+id/months"
+            style="@style/RadioButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Months" />
+
+    </info.hoang8f.android.segmented.SegmentedGroup>
+
+</LinearLayout>

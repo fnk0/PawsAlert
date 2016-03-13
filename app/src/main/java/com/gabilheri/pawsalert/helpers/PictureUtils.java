@@ -7,6 +7,9 @@ import android.graphics.RectF;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.parse.ParseFile;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -85,6 +88,15 @@ public final class PictureUtils {
         String timeStamp = DateFormatter.format(new Date());
         String fileName = ("IMG_" + timeStamp) + ".jpg";
         return saveBitmap(bm, mediaStorageDir, fileName);
+    }
+
+    public static ParseFile getParseFileFromPath(String path, String name, String sufix) {
+        Bitmap bm = BitmapFactory.decodeFile(path);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+        byte[] byteArray = stream.toByteArray();
+        String fileName = name + "_" + new Date().getTime() + "_" + sufix + ".jpg";
+        return new ParseFile(fileName, byteArray);
     }
 
     public static Bitmap resizeImage(Bitmap bm) {

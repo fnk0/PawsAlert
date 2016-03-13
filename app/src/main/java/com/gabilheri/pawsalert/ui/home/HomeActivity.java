@@ -68,4 +68,17 @@ public class HomeActivity extends BaseDrawerPagerActivity implements View.OnClic
             }
         }
     }
+
+    public void refreshFavorites() {
+        mFavoritesFragment.queryData();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            mMissingFragment.queryData();
+            mAdoptFragment.queryData();
+        }
+    }
 }

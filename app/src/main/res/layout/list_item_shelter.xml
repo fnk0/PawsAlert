@@ -1,0 +1,81 @@
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:orientation="vertical"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="4dp"
+    app:cardPreventCornerOverlap="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/shelterImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/grey_400"
+            android:scaleType="centerCrop"
+            android:transitionName="@string/petImage"
+            tools:src="@drawable/shelter_bg"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/shelterName"
+            android:padding="8dp"
+            tools:text="Lost Animals Home"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/actionCall"
+                android:layout_width="48dp"
+                android:scaleType="centerInside"
+                android:layout_height="match_parent"
+                android:background="?android:attr/selectableItemBackground"
+                android:tint="@color/primary_dark"
+                android:src="@drawable/ic_call"/>
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/actionShare"
+                android:layout_width="48dp"
+                android:scaleType="centerInside"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:src="@drawable/ic_social_share"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:text="@string/more_info"
+                android:textColor="@color/primary_dark"
+                android:textSize="18sp"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

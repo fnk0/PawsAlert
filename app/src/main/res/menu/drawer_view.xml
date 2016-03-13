@@ -6,10 +6,10 @@
             android:icon="@drawable/ic_paw_print"
             android:title="@string/home"/>
 
-        <item
-            android:id="@+id/donate"
-            android:icon="@drawable/ic_donate"
-            android:title="@string/donate"/>
+        <!--<item-->
+            <!--android:id="@+id/donate"-->
+            <!--android:icon="@drawable/ic_donate"-->
+            <!--android:title="@string/donate"/>-->
 
         <item
             android:id="@+id/shelter"

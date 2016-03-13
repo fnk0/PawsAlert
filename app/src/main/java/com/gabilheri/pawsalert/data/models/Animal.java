@@ -27,14 +27,14 @@ public class Animal extends BaseParseClass<Animal> {
     String name;
     String petType;
     String gender;
-    int age;
+    String age;
     boolean microchip;
     boolean vaccinations;
     boolean missing;
     boolean isNeutered;
     double latitude;
     double longitude;
-    double adoptionFee;
+    String adoptionFee;
     String otherInfo;
     String size;
     List<ParseFile> photos;
@@ -67,11 +67,11 @@ public class Animal extends BaseParseClass<Animal> {
         this.gender = gender;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 
@@ -147,11 +147,11 @@ public class Animal extends BaseParseClass<Animal> {
         this.photos = photos;
     }
 
-    public double getAdoptionFee() {
+    public String getAdoptionFee() {
         return adoptionFee;
     }
 
-    public void setAdoptionFee(double adoptionFee) {
+    public void setAdoptionFee(String adoptionFee) {
         this.adoptionFee = adoptionFee;
     }
 

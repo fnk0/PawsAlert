@@ -16,7 +16,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/detailsTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
@@ -32,8 +33,8 @@
             android:layout_marginRight="8dp"
             android:background="@color/grey_300"/>
 
-        <TextView
-            android:id="@+id/petDetails"
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/details"
             android:padding="16dp"
             tools:text="@string/loren_ipsum"
             android:layout_width="match_parent"

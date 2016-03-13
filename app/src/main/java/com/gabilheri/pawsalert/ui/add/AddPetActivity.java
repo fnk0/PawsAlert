@@ -1,9 +1,6 @@
 package com.gabilheri.pawsalert.ui.add;
 
-import android.Manifest;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -18,13 +15,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.bumptech.glide.Glide;
-import com.canelmas.let.AskPermission;
 import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.base.BaseActivity;
 import com.gabilheri.pawsalert.data.models.Animal;
 import com.gabilheri.pawsalert.data.models.User;
 import com.gabilheri.pawsalert.helpers.Const;
 import com.gabilheri.pawsalert.helpers.FileUriUtils;
+import com.gabilheri.pawsalert.helpers.PictureUtils;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -41,9 +38,7 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -71,7 +66,7 @@ public class AddPetActivity extends BaseActivity
     @Bind(R.id.petAge)
     AppCompatEditText mPetAgeEditText;
 
-    @Bind(R.id.petDetails)
+    @Bind(R.id.details)
     AppCompatEditText mPetDetailsEditText;
 
     @Bind(R.id.hasMicrochip)
@@ -91,6 +86,9 @@ public class AddPetActivity extends BaseActivity
 
     @Bind(R.id.segment_size)
     SegmentedGroup mSegmentSize;
+
+    @Bind(R.id.segmentAge)
+    SegmentedGroup mSegmentAge;
 
     @Bind(R.id.segment_type)
     SegmentedGroup mSegmentType;
@@ -116,6 +114,7 @@ public class AddPetActivity extends BaseActivity
     List<String> mPhotos;
     int mUploaded = 0;
     Animal mAnimal;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -146,9 +145,12 @@ public class AddPetActivity extends BaseActivity
         }
     }
 
-    @AskPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     @OnClick(R.id.addPhotos)
     public void addPhotos(View v) {
+        if (mPhotos.size() == Const.MAX_PHOTOS) {
+            showSnackbar("You Reached the maximum of " + Const.MAX_PHOTOS + " photos.");
+            return;
+        }
         Intent intent = new Intent();
         intent.setType(Const.MIME_IMAGE_ALL);
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -225,7 +227,7 @@ public class AddPetActivity extends BaseActivity
     public void createPetListing(View v) {
         mAnimal = new Animal();
         mAnimal.setName(mPetNameEditText.getText().toString());
-        mAnimal.setAge(Integer.parseInt(mPetAgeEditText.getText().toString()));
+        mAnimal.setAge(mPetAgeEditText.getText().toString() + " " + getRadioGroupText(mSegmentAge));
         mAnimal.setPetType(getRadioGroupText(mSegmentType));
         mAnimal.setGender(getRadioGroupText(mSegmentGender));
         mAnimal.setMissing(getRadioGroupText(mSegmentMissing).equals("Missing"));
@@ -238,17 +240,19 @@ public class AddPetActivity extends BaseActivity
         mAnimal.setOtherInfo(mPetDetailsEditText.getText().toString());
         mAnimal.setUser((User) ParseUser.getCurrentUser());
 
-        if (mPhotos.size() == 0) {
-            //TODO show error to the user
+        if (mAdoptionFeeLayout.getVisibility() == View.VISIBLE) {
+            mAnimal.setAdoptionFee(mAdoptionFeeEditText.getText().toString());
         }
 
+        if (mPhotos.size() == 0) {
+            showSnackbar("You need at least 1 photo.");
+            return;
+        }
+
+        showProgressDialog("Adding pet listing...", null);
+
         for (String s : mPhotos) {
-            Bitmap bm = BitmapFactory.decodeFile(s);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.JPEG, 90, stream);
-            byte[] byteArray = stream.toByteArray();
-            String fileName = mAnimal.getName() + "_" + new Date().getTime() + "_" + mUploaded + ".jpg";
-            ParseFile file = new ParseFile(fileName, byteArray);
+            ParseFile file = PictureUtils.getParseFileFromPath(s, mAnimal.getName(), String.valueOf(mUploaded));
             mAnimal.addPhoto(file);
             file.saveInBackground(new SaveCallback() {
                 @Override
@@ -260,10 +264,13 @@ public class AddPetActivity extends BaseActivity
                         mAnimal.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
+                                dismissDialog();
                                 if (e != null) {
                                     Timber.e(e, "Could not save object!");
+                                    showSnackbar("Error creating pet listing. Try again later.");
                                 } else {
                                     Timber.d("Successfully saved pet");
+                                    setResult(RESULT_OK);
                                     finish();
                                 }
                             }

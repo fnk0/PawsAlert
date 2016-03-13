@@ -2,6 +2,7 @@ package com.gabilheri.pawsalert.data.models;
 
 import com.gabilheri.pawsalert.base.BaseParseClass;
 import com.parse.ParseClassName;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 
 /**
@@ -25,7 +26,8 @@ public class AnimalShelter extends BaseParseClass<AnimalShelter> {
     String phoneNumber;
     String emergencyNumber;
     String openTime;
-    String endTime;
+    String closeTime;
+    ParseFile mCoverPhoto;
 
     public AnimalShelter() {
     }
@@ -110,8 +112,39 @@ public class AnimalShelter extends BaseParseClass<AnimalShelter> {
         this.emergencyNumber = emergencyNumber;
     }
 
+    public String getOpenTime() {
+        return openTime;
+    }
+
+    public void setOpenTime(String openTime) {
+        this.openTime = openTime;
+    }
+
+    public String getCloseTime() {
+        return closeTime;
+    }
+
+    public void setCloseTime(String closeTime) {
+        this.closeTime = closeTime;
+    }
+
     public static ParseQuery<AnimalShelter> getQuery() {
         return ParseQuery.getQuery(AnimalShelter.class);
+    }
+
+    public ParseFile getCoverPhoto() {
+        return mCoverPhoto;
+    }
+
+    public void setCoverPhoto(ParseFile coverPhoto) {
+        mCoverPhoto = coverPhoto;
+    }
+
+    public String isValidShelter() {
+
+
+
+        return null;
     }
 
     @Override

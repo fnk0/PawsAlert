@@ -37,6 +37,8 @@
 
         <activity android:name=".ui.shelter.ActivityAddShelter" />
 
+        <activity android:name=".ui.shelter.ActivityShelterDetails" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBC0RDlSjm2O4P_kFUEzLPp3cQz2LKdM7s"/>

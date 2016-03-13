@@ -11,7 +11,6 @@ import android.view.View;
 import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.base.BaseRecyclerListFragment;
 import com.gabilheri.pawsalert.base.ItemCallback;
-import com.gabilheri.pawsalert.base.OnScrolledCallback;
 import com.gabilheri.pawsalert.data.models.Animal;
 import com.gabilheri.pawsalert.data.models.Favorite;
 import com.gabilheri.pawsalert.data.models.TransitionWrapperModel;
@@ -24,6 +23,7 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ import timber.log.Timber;
  * @since 1/18/16.
  */
   public class PetListFragment extends BaseRecyclerListFragment
-        implements ItemCallback<TransitionWrapperModel<Animal>>, FindCallback<Animal>, OnScrolledCallback {
+        implements ItemCallback<TransitionWrapperModel<Animal>>, FindCallback<Animal> {
 
     public static final String PET_LIST_TYPE = "com.gabilheri.paws.petlisttype";
 
@@ -50,7 +50,6 @@ import timber.log.Timber;
 
     PetAdapter mPetAdapter;
     int mPetListType;
-    int mCurrentPage = 1;
 
     User mCurrentUser;
     protected BangAnimationView mBangAnimationView;
@@ -71,15 +70,13 @@ import timber.log.Timber;
         Bundle args = getArguments();
         mPetListType = args.getInt(PET_LIST_TYPE);
         initGridCardsList(mPetAdapter);
-        queryData(mCurrentPage);
         mBangAnimationView = BangAnimationView.attach2Window(getActivity());
+        queryData();
     }
 
     @SuppressWarnings("unchecked")
-    public void queryData(int page) {
-        if (page == 1) {
-            mPetAdapter.clear();
-        }
+    public void queryData() {
+        mPetAdapter.clear();
         if (mPetListType == FRAGMENT_FAVORITE) {
             Favorite.getQuery()
                     .include("animal")
@@ -104,7 +101,6 @@ import timber.log.Timber;
 
     public ParseQuery getQuery() {
         return Animal.getQuery()
-                .setLimit(10)
                 .include("user")
                 .whereEqualTo("missing", mPetListType == FRAGMENT_MISSING);
     }
@@ -123,6 +119,7 @@ import timber.log.Timber;
                             @Override
                             public void done(Favorite object, ParseException e) {
                                 object.deleteInBackground();
+                                refreshFavorites();
                             }
                         });
                     } else {
@@ -130,8 +127,12 @@ import timber.log.Timber;
                         Favorite fav = new Favorite()
                                 .setUser(mCurrentUser)
                                 .setAnimal(item.getModel());
-                        fav.toParseObject(fav).saveInBackground();
-
+                        fav.toParseObject(fav).saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                refreshFavorites();
+                            }
+                        });
                     }
                     item.getModel().setFavorite(!item.getModel().isFavorite());
                 }
@@ -141,9 +142,9 @@ import timber.log.Timber;
                 Intent intent = new Intent(getActivity(), ActivityDetails.class);
                 intent.putExtra(Const.OBJECT_ID, animal.getObjectId());
                 String picUrl = animal.getPhotos().get(0).getUrl();
-                intent.putExtra(Const.PET_IMAGE, picUrl);
+                intent.putExtra(Const.IMAGE_EXTRA, picUrl);
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), item.getView(), Const.PET_IMAGE);
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), item.getView(), Const.IMAGE_EXTRA);
                     startActivity(intent, options.toBundle());
                 } else {
                     startActivity(intent);
@@ -151,6 +152,13 @@ import timber.log.Timber;
                 break;
             case Const.ANIMAL_SHARE:
                 break;
+        }
+    }
+
+    public void refreshFavorites() {
+        if (getActivity() instanceof HomeActivity) {
+            HomeActivity activity = (HomeActivity) getActivity();
+            activity.refreshFavorites();
         }
     }
 
@@ -178,11 +186,5 @@ import timber.log.Timber;
                         });
             }
         }
-    }
-
-    @Override
-    public void onScrolled(int page) {
-        mCurrentPage = page;
-        queryData(mCurrentPage);
     }
 }

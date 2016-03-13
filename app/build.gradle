@@ -48,7 +48,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    String supportLibVersion = "23.1.1"
+    String supportLibVersion = "23.2.1"
     String playServicesVersion = "8.4.0"
 
     // Google Support Libraries
@@ -78,11 +78,11 @@ dependencies {
     compile 'info.hoang8f:android-segmented:1.0.6'
     compile 'com.github.anshulagarwal06:PasswordEditText:v1.0'
 
-    compile('com.github.afollestad.material-dialogs:core:0.8.5.3@aar') {
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.6@aar') {
         transitive = true
     }
 
-    compile('com.github.afollestad.material-dialogs:commons:0.8.5.3@aar') {
+    compile('com.github.afollestad.material-dialogs:commons:0.8.5.6@aar') {
         transitive = true
     }
 

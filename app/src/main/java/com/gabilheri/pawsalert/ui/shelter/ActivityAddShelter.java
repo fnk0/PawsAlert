@@ -15,8 +15,11 @@ import android.widget.TimePicker;
 import com.bumptech.glide.Glide;
 import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.base.BaseActivity;
+import com.gabilheri.pawsalert.data.models.AnimalShelter;
+import com.gabilheri.pawsalert.data.models.User;
 import com.gabilheri.pawsalert.helpers.Const;
 import com.gabilheri.pawsalert.helpers.FileUriUtils;
+import com.gabilheri.pawsalert.helpers.PictureUtils;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -27,6 +30,10 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.Locale;
 
@@ -78,10 +85,16 @@ public class ActivityAddShelter extends BaseActivity
     @Bind(R.id.addDescription)
     AppCompatEditText mShelterDescription;
 
+    @Bind(R.id.shelterEmail)
+    AppCompatEditText mShelterEmailET;
+
     Place mSelectedLocation;
 
     TimePickerDialog mTimePickerDialog;
     boolean mOpenTime;
+    String mPhotoPath;
+    User mCurrentUser;
+    AnimalShelter mAnimalShelter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,6 +102,7 @@ public class ActivityAddShelter extends BaseActivity
         enableBackNav();
         setTitle("");
         mCollapsingToolbar.setTitle("");
+        mCurrentUser = (User) ParseUser.getCurrentUser();
     }
 
     @OnClick(R.id.fabAddPicture)
@@ -135,7 +149,6 @@ public class ActivityAddShelter extends BaseActivity
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
         String amPm;
         if (hourOfDay < 12) {
             amPm = "am";
@@ -143,7 +156,6 @@ public class ActivityAddShelter extends BaseActivity
             amPm = "pm";
             hourOfDay -= 12;
         }
-
         String text = String.format(Locale.getDefault(), "%02d:%02d %s", hourOfDay, minute, amPm);
         if (mOpenTime) {
             mOpenTimeBTN.setText(text);
@@ -165,9 +177,9 @@ public class ActivityAddShelter extends BaseActivity
                 MapsInitializer.initialize(this);
             } else if (requestCode == PHOTO_PICKER_REQUEST) {
                 Uri imageURI = data.getData();
-                String filePath = FileUriUtils.getPath(imageURI);
+                mPhotoPath = FileUriUtils.getPath(imageURI);
                 Glide.with(this)
-                        .load(filePath)
+                        .load(mPhotoPath)
                         .into(mShelterImage);
             }
         }
@@ -184,6 +196,41 @@ public class ActivityAddShelter extends BaseActivity
                 Timber.d("Error parsing lat/lng");
             }
         }
+    }
+
+    @OnClick(R.id.createShelter)
+    public void createShelter(View v) {
+        mAnimalShelter = new AnimalShelter();
+        mAnimalShelter.setOwner(mCurrentUser);
+        mAnimalShelter.setAddress(mSelectedLocation.getAddress().toString());
+        mAnimalShelter.setShelterName(mShelterName.getText().toString());
+        mAnimalShelter.setLatitude(mSelectedLocation.getLatLng().latitude);
+        mAnimalShelter.setLongitude(mSelectedLocation.getLatLng().longitude);
+        mAnimalShelter.setOpenTime(mOpenTimeBTN.getText().toString());
+        mAnimalShelter.setCloseTime(mCloseTimeBTN.getText().toString());
+        mAnimalShelter.setDescription(mShelterDescription.getText().toString());
+        mAnimalShelter.setPhoneNumber(mShelterPhoneNumber.getText().toString());
+        mAnimalShelter.setWebsite(mShelterWebsite.getText().toString());
+        mAnimalShelter.setEmail(mShelterEmailET.getText().toString());
+
+        showProgressDialog("Creating Animal Shelter...", null);
+
+        ParseFile file = PictureUtils.getParseFileFromPath(mPhotoPath, mAnimalShelter.getShelterName(), mCurrentUser.getUsername());
+        mAnimalShelter.setCoverPhoto(file);
+        file.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                mAnimalShelter.toParseObject(mAnimalShelter);
+                mAnimalShelter.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        dismissDialog();
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                });
+            }
+        });
     }
 
     @Override

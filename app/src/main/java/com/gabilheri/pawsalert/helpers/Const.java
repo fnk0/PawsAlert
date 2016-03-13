@@ -46,8 +46,9 @@ public final class Const {
      *
      */
     public static final String OBJECT_ID = "objectId";
-    public static final String PET_IMAGE = "petImage";
+    public static final String IMAGE_EXTRA = "petImage";
     public static final String TRANSITION_LAYOUT = "revealTransition";
+    public static final int MAX_PHOTOS = 8;
 
     /**
      * Validation
