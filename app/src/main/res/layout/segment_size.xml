@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:padding="16dp"
     android:orientation="horizontal"
-    app:sc_tint_color="@color/teal_300"
+    app:sc_tint_color="@color/primary"
     tools:showIn="@layout/activity_add"
     >
 

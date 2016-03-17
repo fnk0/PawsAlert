@@ -208,7 +208,7 @@ public class ActivityAddShelter extends BaseActivity
         mAnimalShelter.setLongitude(mSelectedLocation.getLatLng().longitude);
         mAnimalShelter.setOpenTime(mOpenTimeBTN.getText().toString());
         mAnimalShelter.setCloseTime(mCloseTimeBTN.getText().toString());
-        mAnimalShelter.setDescription(mShelterDescription.getText().toString());
+        mAnimalShelter.setShelterDescription(mShelterDescription.getText().toString());
         mAnimalShelter.setPhoneNumber(mShelterPhoneNumber.getText().toString());
         mAnimalShelter.setWebsite(mShelterWebsite.getText().toString());
         mAnimalShelter.setEmail(mShelterEmailET.getText().toString());

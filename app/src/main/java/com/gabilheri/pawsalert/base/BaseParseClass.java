@@ -1,5 +1,7 @@
 package com.gabilheri.pawsalert.base;
 
+import android.os.Bundle;
+
 import com.parse.ParseObject;
 
 import java.lang.reflect.Field;
@@ -51,6 +53,10 @@ public abstract class BaseParseClass<T> extends ParseObject {
             }
         }
         return this;
+    }
+
+    public boolean isTweetApiObj(Object obj) {
+        return (obj instanceof String) || (obj instanceof Bundle);
     }
 
     public static void LogFieldException(Exception ex, Field f) {

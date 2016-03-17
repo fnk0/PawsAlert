@@ -33,9 +33,9 @@ public class HomeActivity extends BaseDrawerPagerActivity implements View.OnClic
 
         enableFab(true, this);
 
-        mMissingFragment = PetListFragment.newInstance(PetListFragment.FRAGMENT_MISSING);
-        mAdoptFragment = PetListFragment.newInstance(PetListFragment.FRAGMENT_ADOPT);
-        mFavoritesFragment = PetListFragment.newInstance(PetListFragment.FRAGMENT_FAVORITE);
+        mMissingFragment = PetListFragment.newInstance(PetListFragment.FRAGMENT_MISSING, null);
+        mAdoptFragment = PetListFragment.newInstance(PetListFragment.FRAGMENT_ADOPT, null);
+        mFavoritesFragment = PetListFragment.newInstance(PetListFragment.FRAGMENT_FAVORITE, null);
 
         addFragment(getString(R.string.missing), mMissingFragment);
         addFragment(getString(R.string.adopt), mAdoptFragment);

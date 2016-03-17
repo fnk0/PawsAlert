@@ -62,5 +62,11 @@
     <string name="adoption_fee">Adoption Fee</string>
     <string name="call">Call</string>
     <string name="website">Website</string>
+    <string name="see_animals">See Animals</string>
+    <string name="see_more_pictures">See More Pictures</string>
+    <string name="create">Create</string>
+    <string name="title">Title</string>
+    <string name="story">Story</string>
+    <string name="see_story">See Story</string>
 
 </resources>

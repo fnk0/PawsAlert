@@ -80,6 +80,7 @@ public class PetViewHolder extends RecyclerView.ViewHolder implements View.OnCli
                 mAnimalItemCallback.onItemCallback(new TransitionWrapperModel<>(mAnimal, mActionFavorite, Const.ANIMAL_FAVORITE));
                 break;
             case R.id.actionShare:
+                mAnimalItemCallback.onItemCallback(new TransitionWrapperModel<>(mAnimal, mActionFavorite, Const.ANIMAL_SHARE));
                 break;
             case R.id.btnMore:
                 mAnimalItemCallback.onItemCallback(new TransitionWrapperModel<>(mAnimal, mPetImage, Const.ANIMAL_OPEN));

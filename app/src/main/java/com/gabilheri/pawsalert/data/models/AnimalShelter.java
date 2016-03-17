@@ -21,7 +21,7 @@ public class AnimalShelter extends BaseParseClass<AnimalShelter> {
     double longitude;
     String address;
     String website;
-    String description;
+    String shelterDescription;
     String email;
     String phoneNumber;
     String emergencyNumber;
@@ -80,12 +80,12 @@ public class AnimalShelter extends BaseParseClass<AnimalShelter> {
         this.website = website;
     }
 
-    public String getDescription() {
-        return description;
+    public String getShelterDescription() {
+        return shelterDescription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setShelterDescription(String shelterDescription) {
+        this.shelterDescription = shelterDescription;
     }
 
     public String getEmail() {

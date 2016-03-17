@@ -92,6 +92,7 @@ public final class PictureUtils {
 
     public static ParseFile getParseFileFromPath(String path, String name, String sufix) {
         Bitmap bm = BitmapFactory.decodeFile(path);
+        bm = resizeImage(bm);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, 90, stream);
         byte[] byteArray = stream.toByteArray();

@@ -39,6 +39,7 @@ public class Animal extends BaseParseClass<Animal> {
     String size;
     List<ParseFile> photos;
     User user;
+    AnimalShelter animalShelter;
 
     @Skip
     boolean isFavorite;
@@ -160,6 +161,14 @@ public class Animal extends BaseParseClass<Animal> {
             photos = new ArrayList<>();
         }
         photos.add(f);
+    }
+
+    public AnimalShelter getAnimalShelter() {
+        return animalShelter;
+    }
+
+    public void setAnimalShelter(AnimalShelter animalShelter) {
+        this.animalShelter = animalShelter;
     }
 
     public User getUser() {

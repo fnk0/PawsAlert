@@ -53,6 +53,7 @@ public class SignUpActivity extends BaseActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         enableBackNav();
+        setTitle(getResources().getString(R.string.sign_up));
         if (getIntent().getExtras() != null &&
                 getIntent().getExtras().getBoolean(Const.TRANSITION_LAYOUT)) {
             enableActivityTransition();

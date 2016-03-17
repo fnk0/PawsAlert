@@ -17,6 +17,7 @@ import com.gabilheri.pawsalert.data.models.User;
 import com.gabilheri.pawsalert.ui.home.HomeActivity;
 import com.gabilheri.pawsalert.ui.shelter.ActivityShelters;
 import com.gabilheri.pawsalert.ui.sign_in.SignInActivity;
+import com.gabilheri.pawsalert.ui.success.ActivitySuccessStory;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -107,6 +108,10 @@ public abstract class BaseDrawerActivity extends BaseActivity implements View.On
 
             case R.id.shelter:
                 startActivity(new Intent(this, ActivityShelters.class));
+                return true;
+
+            case R.id.stories:
+                startActivity(new Intent(this, ActivitySuccessStory.class));
                 return true;
 
             default:

@@ -67,6 +67,8 @@
 
             <include layout="@layout/card_info" />
 
+            <include layout="@layout/card_see_photos" />
+
             <include layout="@layout/card_location" />
 
             <include layout="@layout/card_details" />

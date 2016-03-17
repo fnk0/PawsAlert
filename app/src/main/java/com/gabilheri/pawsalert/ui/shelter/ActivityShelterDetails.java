@@ -1,5 +1,6 @@
 package com.gabilheri.pawsalert.ui.shelter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.AppCompatImageView;
@@ -11,6 +12,7 @@ import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.base.BaseActivity;
 import com.gabilheri.pawsalert.data.models.AnimalShelter;
 import com.gabilheri.pawsalert.helpers.Const;
+import com.gabilheri.pawsalert.ui.home.PetListFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -24,6 +26,7 @@ import com.parse.ParseQuery;
 import java.util.Locale;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 import timber.log.Timber;
 
 /**
@@ -120,15 +123,23 @@ public class ActivityShelterDetails extends BaseActivity
         }
     }
 
+    @OnClick(R.id.seeMoreAnimals)
+    public void seeMoreAnimals(View v) {
+        Intent i = new Intent(this, ActivityShelterAnimals.class);
+        i.putExtra(PetListFragment.SHELTER_ID, mAnimalShelter.getObjectId());
+        startActivity(i);
+    }
+
     @Override
     public void done(AnimalShelter object, ParseException e) {
-        mAnimalShelter = mAnimalShelter.fromParseObject(object);
+        mAnimalShelter = object;
+        mAnimalShelter = mAnimalShelter.fromParseObject(mAnimalShelter);
         mLocationTV.setText(mAnimalShelter.getAddress());
         mCollapsingToolbarLayout.setTitle(mAnimalShelter.getShelterName());
         mShelterHours.setText(String.format(
                 Locale.getDefault(), "%s - %s", mAnimalShelter.getOpenTime(), mAnimalShelter.getCloseTime()));
         mDetailsTitleTV.setText(getString(R.string.about));
-        mDetailsTV.setText(mAnimalShelter.getDescription());
+        mDetailsTV.setText(mAnimalShelter.getShelterDescription());
         setLocation();
     }
 

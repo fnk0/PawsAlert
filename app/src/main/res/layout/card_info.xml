@@ -33,6 +33,34 @@
             android:background="@color/grey_300"/>
 
         <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/adoptionFeeLayout"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_money"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:drawablePadding="8dp"
+                android:text="Adoption Fee" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/adoptionFee"
+                android:gravity="center|end|right"
+                android:layout_marginLeft="16dp"
+                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:orientation="horizontal"
             android:padding="8dp"
             android:layout_marginTop="4dp"

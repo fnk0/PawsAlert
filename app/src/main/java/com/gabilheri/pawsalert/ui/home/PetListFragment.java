@@ -12,6 +12,7 @@ import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.base.BaseRecyclerListFragment;
 import com.gabilheri.pawsalert.base.ItemCallback;
 import com.gabilheri.pawsalert.data.models.Animal;
+import com.gabilheri.pawsalert.data.models.AnimalShelter;
 import com.gabilheri.pawsalert.data.models.Favorite;
 import com.gabilheri.pawsalert.data.models.TransitionWrapperModel;
 import com.gabilheri.pawsalert.data.models.User;
@@ -40,6 +41,7 @@ import timber.log.Timber;
         implements ItemCallback<TransitionWrapperModel<Animal>>, FindCallback<Animal> {
 
     public static final String PET_LIST_TYPE = "com.gabilheri.paws.petlisttype";
+    public static final String SHELTER_ID = "com.gabilheri.paws.shelterID";
 
     public static final int FRAGMENT_ADOPT = 100;
     public static final int FRAGMENT_MISSING = 101;
@@ -50,14 +52,16 @@ import timber.log.Timber;
 
     PetAdapter mPetAdapter;
     int mPetListType;
-
+    String mShelterId;
     User mCurrentUser;
+    AnimalShelter mAnimalShelter;
     protected BangAnimationView mBangAnimationView;
 
-    public static PetListFragment newInstance(@PetListType int type) {
+    public static PetListFragment newInstance(@PetListType int type, String shelterID) {
         Bundle args = new Bundle();
         PetListFragment fragment = new PetListFragment();
         args.putInt(PET_LIST_TYPE, type);
+        args.putString(SHELTER_ID, shelterID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,9 +73,23 @@ import timber.log.Timber;
         mPetAdapter = new PetAdapter(this);
         Bundle args = getArguments();
         mPetListType = args.getInt(PET_LIST_TYPE);
+        mShelterId = args.getString(SHELTER_ID);
         initGridCardsList(mPetAdapter);
         mBangAnimationView = BangAnimationView.attach2Window(getActivity());
-        queryData();
+
+        if (mShelterId != null) {
+            AnimalShelter.getQuery()
+                    .whereEqualTo("objectId", mShelterId)
+                    .include("owner")
+                    .getFirstInBackground(new GetCallback<AnimalShelter>() {
+                        @Override
+                        public void done(AnimalShelter object, ParseException e) {
+                            queryData();
+                        }
+                    });
+        } else {
+            queryData();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -99,10 +117,14 @@ import timber.log.Timber;
 
     }
 
-    public ParseQuery getQuery() {
-        return Animal.getQuery()
+    public ParseQuery<Animal> getQuery() {
+        ParseQuery<Animal> query = Animal.getQuery()
                 .include("user")
                 .whereEqualTo("missing", mPetListType == FRAGMENT_MISSING);
+        if (mAnimalShelter != null) {
+            query.whereEqualTo("animalShelter", mAnimalShelter);
+        }
+        return query;
     }
 
     @Override
@@ -151,6 +173,12 @@ import timber.log.Timber;
                 }
                 break;
             case Const.ANIMAL_SHARE:
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT,
+                        "http://www.stillwaterpaws.com/pet.html?id=" + item.getModel().getObjectId());
+                shareIntent.setType("text/plain");
+                startActivity(Intent.createChooser(shareIntent, "Share"));
                 break;
         }
     }
@@ -166,6 +194,9 @@ import timber.log.Timber;
     public void done(List<Animal> objects, ParseException e) {
         if (e != null) {
             Timber.e(e, "Error getting objects");
+        }
+        if (objects == null) {
+            return;
         }
         for(Animal pf : objects) {
             pf = pf.fromParseObject(pf);

@@ -45,6 +45,7 @@ public class SignInActivity extends BaseActivity implements LogInCallback{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         enableBackNav();
+        setTitle(getResources().getString(R.string.sign_in));
         if (getIntent().getExtras() != null &&
                 getIntent().getExtras().getBoolean(Const.TRANSITION_LAYOUT)) {
             enableActivityTransition();

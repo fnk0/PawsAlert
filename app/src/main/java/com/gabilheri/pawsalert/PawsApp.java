@@ -5,6 +5,7 @@ import android.app.Application;
 import com.gabilheri.pawsalert.data.models.Animal;
 import com.gabilheri.pawsalert.data.models.AnimalShelter;
 import com.gabilheri.pawsalert.data.models.Favorite;
+import com.gabilheri.pawsalert.data.models.SuccessStory;
 import com.gabilheri.pawsalert.data.models.User;
 import com.parse.Parse;
 import com.parse.ParseObject;
@@ -34,6 +35,7 @@ public class PawsApp extends Application {
         ParseObject.registerSubclass(Favorite.class);
         ParseObject.registerSubclass(User.class);
         ParseObject.registerSubclass(AnimalShelter.class);
+        ParseObject.registerSubclass(SuccessStory.class);
         mInstance = this;
     }
 

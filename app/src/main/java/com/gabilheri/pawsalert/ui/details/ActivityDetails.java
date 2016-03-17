@@ -1,10 +1,13 @@
 package com.gabilheri.pawsalert.ui.details;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gabilheri.pawsalert.R;
@@ -20,7 +23,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -60,6 +67,12 @@ public class ActivityDetails extends BaseActivity
     @Bind(R.id.map)
     MapView mMapView;
 
+    @Bind(R.id.adoptionFeeLayout)
+    LinearLayout mAdoptionFeeLayout;
+
+    @Bind(R.id.adoptionFee)
+    AppCompatTextView mAdoptionFeeTV;
+
     GoogleMap mGoogleMap;
     Animal mAnimal;
     String pObjectID;
@@ -97,10 +110,14 @@ public class ActivityDetails extends BaseActivity
     @Override
     public void done(Animal object, ParseException e) {
         mAnimal = object.fromParseObject(object);
+
+        if (mAnimal.getAdoptionFee() != null) {
+            mAdoptionFeeLayout.setVisibility(View.VISIBLE);
+            mAdoptionFeeTV.setText(String.format(Locale.getDefault(), "$ %s.00", mAnimal.getAdoptionFee()));
+        }
+
         mCollapsingToolbarLayout.setTitle(mAnimal.getName());
-
         mPetAgeTV.setText(mAnimal.getAge());
-
         setImage(mIsNeuteredIV, mAnimal.isNeutered());
         setImage(mHasVaccinationsIV, mAnimal.hasVaccinations());
         setImage(mHasMicrochipIV, mAnimal.hasMicrochip());
@@ -116,6 +133,21 @@ public class ActivityDetails extends BaseActivity
 
     public void setImage(ImageView imgView, boolean checked) {
         imgView.setImageResource(checked ? R.drawable.ic_checked : R.drawable.ic_unchecked);
+    }
+
+    @OnClick(R.id.seeMorePhotos)
+    public void seeMorePhotos(View v) {
+        Intent i = new Intent(this, ActivityPictures.class);
+        i.putExtra(Const.TITLE_EXTRA, mAnimal.getName());
+
+        ArrayList<String> urls = new ArrayList<>();
+
+        for(ParseFile pf : mAnimal.getPhotos()) {
+            urls.add(pf.getUrl());
+        }
+
+        i.putStringArrayListExtra(Const.IMAGE_EXTRA, urls);
+        startActivity(i);
     }
 
     public void setLocation() {

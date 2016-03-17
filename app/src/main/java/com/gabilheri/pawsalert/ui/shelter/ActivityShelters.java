@@ -13,9 +13,11 @@ import com.gabilheri.pawsalert.base.BaseDrawerActivity;
 import com.gabilheri.pawsalert.base.ItemCallback;
 import com.gabilheri.pawsalert.data.models.AnimalShelter;
 import com.gabilheri.pawsalert.data.models.TransitionWrapperModel;
+import com.gabilheri.pawsalert.data.models.User;
 import com.gabilheri.pawsalert.helpers.Const;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -37,16 +39,19 @@ public class ActivityShelters extends BaseDrawerActivity implements ItemCallback
     RecyclerView mRecyclerView;
 
     ShelterAdapter mShelterAdapter;
+    User mCurrentUser;
+    boolean hasAnimalShelter = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         enableFab(true, this);
         setTitle(getString(R.string.shelters));
-        mNavigationView.getMenu().findItem(R.id.shelter).setChecked(true);
+        mNavigationView.setCheckedItem(R.id.shelter);
         mShelterAdapter = new ShelterAdapter(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mShelterAdapter);
+        mCurrentUser = (User) ParseUser.getCurrentUser();
         queryData();
     }
 
@@ -54,7 +59,11 @@ public class ActivityShelters extends BaseDrawerActivity implements ItemCallback
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
-                startActivity(new Intent(this, ActivityAddShelter.class));
+                if (hasAnimalShelter) {
+                    showSnackbar("A user can only have 1 animal shelter.");
+                } else {
+                    startActivity(new Intent(this, ActivityAddShelter.class));
+                }
                 break;
         }
     }
@@ -85,7 +94,9 @@ public class ActivityShelters extends BaseDrawerActivity implements ItemCallback
     }
 
     public void queryData() {
-        AnimalShelter.getQuery().findInBackground(this);
+        AnimalShelter.getQuery()
+                .include("owner")
+                .findInBackground(this);
     }
 
     @Override
@@ -93,6 +104,11 @@ public class ActivityShelters extends BaseDrawerActivity implements ItemCallback
         for(int i = 0; i < objects.size(); i++) {
             AnimalShelter as = objects.get(i);
             as = as.fromParseObject(as);
+
+            if (as.getOwner().getObjectId().equals(mCurrentUser.getObjectId())) {
+                hasAnimalShelter = true;
+            }
+
             objects.set(i, as);
         }
         mShelterAdapter.addAll(objects);
@@ -100,6 +116,6 @@ public class ActivityShelters extends BaseDrawerActivity implements ItemCallback
 
     @Override
     public int getLayoutResource() {
-        return R.layout.activity_shelters;
+        return R.layout.activity_long_toolbar_rv;
     }
 }

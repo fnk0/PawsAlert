@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">@color/teal_500</color>
-    <color name="primary_dark">@color/teal_700</color>
-    <color name="accent_color">@color/orange_500</color>
+    <color name="primary">@color/blue_600</color>
+    <color name="primary_dark">@color/blue_800</color>
+    <color name="accent_color">@color/orange_A400</color>
     <color name="accent_dark">@color/orange_700</color>
     <color name="background_color">@color/grey_300</color>
     <color name="window_background">@color/grey_200</color>
@@ -91,20 +91,20 @@
     <color name="indigo_A400">#3d5afe</color>
     <color name="indigo_A700">#304ffe</color>
 
-    <color name="blue_50">#e7e9fd</color>
-    <color name="blue_100">#d0d9ff</color>
-    <color name="blue_200">#afbfff</color>
-    <color name="blue_300">#91a7ff</color>
-    <color name="blue_400">#738ffe</color>
-    <color name="blue_500">#5677fc</color>
-    <color name="blue_600">#4e6cef</color>
-    <color name="blue_700">#455ede</color>
-    <color name="blue_800">#3b50ce</color>
-    <color name="blue_900">#2a36b1</color>
-    <color name="blue_A100">#a6baff</color>
-    <color name="blue_A200">#6889ff</color>
-    <color name="blue_A400">#4d73ff</color>
-    <color name="blue_A700">#4d69ff</color>
+    <color name="blue_50">#E3F2FD</color>
+    <color name="blue_100">#BBDEFB</color>
+    <color name="blue_200">#90CAF9</color>
+    <color name="blue_300">#64B5F6</color>
+    <color name="blue_400">#42A5F5</color>
+    <color name="blue_500">#2196F3</color>
+    <color name="blue_600">#1E88E5</color>
+    <color name="blue_700">#1976D2</color>
+    <color name="blue_800">#1565C0</color>
+    <color name="blue_900">#0D47A1</color>
+    <color name="blue_A100">#82B1FF</color>
+    <color name="blue_A200">#448AFF</color>
+    <color name="blue_A400">#2979FF</color>
+    <color name="blue_A700">#2962FF</color>
 
     <color name="light_blue_50">#e1f5fe</color>
     <color name="light_blue_100">#b3e5fc</color>

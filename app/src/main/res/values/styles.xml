@@ -10,6 +10,13 @@
         <item name="android:windowBackground">@color/window_background</item>
     </style>
 
+    <style name="Theme.Paws.Black" parent="Theme.Paws.Base">
+        <item name="colorPrimary">@color/grey_black_1000</item>
+        <item name="colorPrimaryDark">@color/grey_black_1000</item>
+        <item name="colorAccent">@color/primary</item>
+        <item name="android:windowBackground">@color/grey_black_1000</item>
+    </style>
+
 
     <style name="Widget.CardContent" parent="android:Widget">
         <item name="android:paddingLeft">16dp</item>

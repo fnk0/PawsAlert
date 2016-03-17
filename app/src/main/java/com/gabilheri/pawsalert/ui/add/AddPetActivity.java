@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.base.BaseActivity;
 import com.gabilheri.pawsalert.data.models.Animal;
+import com.gabilheri.pawsalert.data.models.AnimalShelter;
 import com.gabilheri.pawsalert.data.models.User;
 import com.gabilheri.pawsalert.helpers.Const;
 import com.gabilheri.pawsalert.helpers.FileUriUtils;
@@ -33,6 +34,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -114,7 +116,8 @@ public class AddPetActivity extends BaseActivity
     List<String> mPhotos;
     int mUploaded = 0;
     Animal mAnimal;
-
+    AnimalShelter mAnimalShelter;
+    User mCurrentUser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,6 +127,17 @@ public class AddPetActivity extends BaseActivity
         mPetNameEditText.setHint(R.string.pet_name);
         mPhotos = new ArrayList<>();
         mSegmentMissing.setOnCheckedChangeListener(this);
+        mCurrentUser = (User) ParseUser.getCurrentUser();
+        AnimalShelter.getQuery()
+                .whereEqualTo("owner", mCurrentUser)
+                .getFirstInBackground(new GetCallback<AnimalShelter>() {
+                    @Override
+                    public void done(AnimalShelter object, ParseException e) {
+                        if (e == null && object != null) {
+                            mAnimalShelter = new AnimalShelter().fromParseObject(object);
+                        }
+                    }
+                });
     }
 
     @OnClick(R.id.selectLocation)
@@ -238,7 +252,11 @@ public class AddPetActivity extends BaseActivity
         mAnimal.setLongitude(mSelectedLocation.longitude);
         mAnimal.setLatitude(mSelectedLocation.latitude);
         mAnimal.setOtherInfo(mPetDetailsEditText.getText().toString());
-        mAnimal.setUser((User) ParseUser.getCurrentUser());
+        mAnimal.setUser(mCurrentUser);
+
+        if (mAnimalShelter != null) {
+            mAnimal.setAnimalShelter(mAnimalShelter);
+        }
 
         if (mAdoptionFeeLayout.getVisibility() == View.VISIBLE) {
             mAnimal.setAdoptionFee(mAdoptionFeeEditText.getText().toString());
