@@ -1,8 +1,10 @@
 package com.gabilheri.pawsalert.ui.details;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
@@ -76,6 +78,7 @@ public class ActivityDetails extends BaseActivity
     GoogleMap mGoogleMap;
     Animal mAnimal;
     String pObjectID;
+    String mPictureUrl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,10 +89,25 @@ public class ActivityDetails extends BaseActivity
 
         if (extras != null) {
             pObjectID = extras.getString(Const.OBJECT_ID);
+            mPictureUrl = extras.getString(Const.IMAGE_EXTRA);
+            loadImage(mPictureUrl, mHeaderImageView);
 
-            String pictureUrl = extras.getString(Const.IMAGE_EXTRA);
-            loadImage(pictureUrl, mHeaderImageView);
+            int notificationID = extras.getInt(Const.NOTIFICATION_ID);
 
+            if (notificationID != 0) {
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+                notificationManager.cancel(notificationID);
+            }
+        }
+
+        if (pObjectID == null) {
+            Uri data = getIntent().getData();
+            if (data != null) {
+                pObjectID = data.getQueryParameter("id");
+            }
+        }
+
+        if (pObjectID != null) {
             ParseQuery<Animal> query = Animal.getQuery();
             query.include("user");
             query.getInBackground(pObjectID, this);
@@ -115,6 +133,12 @@ public class ActivityDetails extends BaseActivity
             mAdoptionFeeLayout.setVisibility(View.VISIBLE);
             mAdoptionFeeTV.setText(String.format(Locale.getDefault(), "$ %s.00", mAnimal.getAdoptionFee()));
         }
+
+        if (mPictureUrl == null) {
+            mPictureUrl = mAnimal.getPhotos().get(0).getUrl();
+            loadImage(mPictureUrl, mHeaderImageView);
+        }
+
 
         mCollapsingToolbarLayout.setTitle(mAnimal.getName());
         mPetAgeTV.setText(mAnimal.getAge());

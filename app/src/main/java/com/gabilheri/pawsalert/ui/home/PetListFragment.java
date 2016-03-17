@@ -173,6 +173,7 @@ import timber.log.Timber;
                 }
                 break;
             case Const.ANIMAL_SHARE:
+                mBangAnimationView.bang(item.getView());
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
                 shareIntent.putExtra(Intent.EXTRA_TEXT,
@@ -186,7 +187,7 @@ import timber.log.Timber;
     public void refreshFavorites() {
         if (getActivity() instanceof HomeActivity) {
             HomeActivity activity = (HomeActivity) getActivity();
-            activity.refreshFavorites();
+//            activity.refreshFavorites();
         }
     }
 

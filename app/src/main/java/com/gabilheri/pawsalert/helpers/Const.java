@@ -14,6 +14,11 @@ public final class Const {
     }
 
     /**
+     * Preferences
+     */
+    public static final String SERVICE_STARTED = "service_started";
+
+    /**
      * Activity Result requests
      */
     public static final int REQUEST_TAKE_PHOTO = 1000;
@@ -45,6 +50,7 @@ public final class Const {
     /**
      *
      */
+    public static final String NOTIFICATION_ID = "com.gabilheri.pawsalert.notificaiton_id";
     public static final String OBJECT_ID = "objectId";
     public static final String TITLE_EXTRA = "title";
     public static final String IMAGE_EXTRA = "petImage";
