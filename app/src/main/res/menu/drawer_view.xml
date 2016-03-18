@@ -27,9 +27,9 @@
             android:title="@string/success_stories"/>
 
         <item
-            android:id="@+id/about"
-            android:icon="@drawable/ic_action_info"
-            android:title="@string/about"/>
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_action_settings"
+            android:title="@string/settings"/>
 
         <item
             android:id="@+id/sign_in_out"

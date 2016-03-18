@@ -43,6 +43,7 @@ import timber.log.Timber;
 
     public static final String PET_LIST_TYPE = "com.gabilheri.paws.petlisttype";
     public static final String SHELTER_ID = "com.gabilheri.paws.shelterID";
+    public static final String USER_ID = "com.gabilheri.paws.userID";
 
     public static final int FRAGMENT_ADOPT = 100;
     public static final int FRAGMENT_MISSING = 101;
@@ -54,6 +55,7 @@ import timber.log.Timber;
     PetAdapter mPetAdapter;
     int mPetListType;
     String mShelterId;
+    String mUserId;
     User mCurrentUser;
     AnimalShelter mAnimalShelter;
     protected BangAnimationView mBangAnimationView;
@@ -63,6 +65,14 @@ import timber.log.Timber;
         PetListFragment fragment = new PetListFragment();
         args.putInt(PET_LIST_TYPE, type);
         args.putString(SHELTER_ID, shelterID);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static PetListFragment newInstance(String reference, String id) {
+        Bundle args = new Bundle();
+        PetListFragment fragment = new PetListFragment();
+        args.putString(reference, id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -89,6 +99,7 @@ import timber.log.Timber;
         if (petIds == null) {
             mPetListType = args.getInt(PET_LIST_TYPE);
             mShelterId = args.getString(SHELTER_ID);
+            mUserId = args.getString(USER_ID);
 
             if (mShelterId != null) {
                 AnimalShelter.getQuery()
@@ -100,6 +111,8 @@ import timber.log.Timber;
                                 queryData();
                             }
                         });
+            } else if (mUserId != null) {
+                queryUserPets();
             } else {
                 queryData();
             }
@@ -154,6 +167,13 @@ import timber.log.Timber;
             query.whereEqualTo("animalShelter", mAnimalShelter);
         }
         return query;
+    }
+
+    public void queryUserPets() {
+        Animal.getQuery()
+                .whereEqualTo("user", ParseUser.getCurrentUser())
+                .include("user")
+                .findInBackground(this);
     }
 
     @Override

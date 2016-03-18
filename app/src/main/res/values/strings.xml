@@ -68,5 +68,9 @@
     <string name="title">Title</string>
     <string name="story">Story</string>
     <string name="see_story">See Story</string>
+    <string name="settings">Settings</string>
+    <string name="change_password">Change Password</string>
+    <string name="edit_account">Edit Account</string>
+    <string name="save_changes">Save Changes</string>
 
 </resources>

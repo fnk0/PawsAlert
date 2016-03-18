@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.data.models.User;
 import com.gabilheri.pawsalert.ui.home.HomeActivity;
+import com.gabilheri.pawsalert.ui.settings.SettingsActivity;
 import com.gabilheri.pawsalert.ui.shelter.ActivityShelters;
 import com.gabilheri.pawsalert.ui.sign_in.SignInActivity;
 import com.gabilheri.pawsalert.ui.success.ActivitySuccessStory;
@@ -114,6 +115,9 @@ public abstract class BaseDrawerActivity extends BaseActivity implements View.On
                 startActivity(new Intent(this, ActivitySuccessStory.class));
                 return true;
 
+            case R.id.settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
             default:
                 return false;
         }

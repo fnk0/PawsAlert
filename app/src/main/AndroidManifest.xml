@@ -63,6 +63,15 @@
 
         <activity android:name=".ui.notification.ActivityNotificationPetList" />
 
+        <activity android:name=".ui.settings.SettingsActivity" />
+
+        <activity android:name=".ui.profile.UserProfileActivity">
+            <intent-filter>
+                <action android:name="action.Account"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".ui.details.ActivityPictures"
             android:theme="@style/Theme.Paws.Black"

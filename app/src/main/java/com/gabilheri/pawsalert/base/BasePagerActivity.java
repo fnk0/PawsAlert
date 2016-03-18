@@ -14,9 +14,9 @@ import butterknife.Bind;
  *
  * @author Marcus Gabilheri
  * @version 1.0
- * @since 1/18/16.
+ * @since 3/18/16.
  */
-public abstract class BaseDrawerPagerActivity extends BaseDrawerActivity {
+public class BasePagerActivity extends BaseActivity {
 
     @Bind(R.id.tabs)
     protected TabLayout mTabHost;
@@ -33,6 +33,7 @@ public abstract class BaseDrawerPagerActivity extends BaseDrawerActivity {
     }
 
 
+
     protected void addFragment(String title, Fragment fragment) {
         mAdapter.addFragment(fragment, title);
     }
@@ -47,12 +48,6 @@ public abstract class BaseDrawerPagerActivity extends BaseDrawerActivity {
             mPager.setOffscreenPageLimit(mAdapter.getCount());
         }
         mTabHost.setupWithViewPager(mPager);
-    }
-
-
-    @Override
-    public int getLayoutResource() {
-        return R.layout.activity_base_pager_drawer;
     }
 
 }

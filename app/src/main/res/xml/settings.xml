@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <PreferenceCategory
+      android:title="Account Settings">
+    <PreferenceScreen
+      android:icon="@drawable/ic_account_grey"
+      android:key="My Account"
+      android:title="My Account">
+      <intent android:action="action.Account" />
+    </PreferenceScreen>
+
+    <PreferenceScreen
+      android:icon="@drawable/ic_action_info"
+      android:key="about"
+      android:title="About">
+      <intent android:action="action.LinkDevices" />
+    </PreferenceScreen>
+
+  </PreferenceCategory>
+
+    <!--<PreferenceScreen-->
+    <!--android:icon="@drawable/ic_reminders"-->
+    <!--android:key="hourly_reminders"-->
+    <!--android:title="Set Reminders">-->
+    <!--<intent android:action="action.Reminders" />-->
+    <!--</PreferenceScreen>-->
+
+  <PreferenceCategory android:title="App Settings">
+
+    <EditTextPreference
+        android:defaultValue="1"
+        android:dialogTitle="Calories Goal"
+        android:icon="@drawable/ic_location"
+        android:inputType="number"
+        android:key="notification_range"
+        android:numeric="decimal"
+        android:singleLine="true"
+        android:summary="%s Miles."
+        android:title="Notification Range"
+        />
+
+    <SwitchPreference
+      android:key="notifications_enale"
+      android:title="Enable Notifications"
+      android:defaultValue="true"
+      android:icon="@drawable/ic_notifications"
+      />
+  </PreferenceCategory>
+
+  <PreferenceCategory android:title="Other">
+
+    <PreferenceScreen
+        android:icon="@drawable/ic_action_info"
+        android:key="about"
+        android:title="About">
+      <intent android:action="action.LinkDevices" />
+    </PreferenceScreen>
+
+  </PreferenceCategory>
+
+</PreferenceScreen>

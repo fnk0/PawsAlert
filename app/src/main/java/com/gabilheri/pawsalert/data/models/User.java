@@ -1,5 +1,6 @@
 package com.gabilheri.pawsalert.data.models;
 
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.util.Locale;
@@ -51,6 +52,14 @@ public class User extends ParseUser {
         }
         setFirstName(fArray[0]);
         setLastName(fArray[1]);
+    }
+
+    public void setProfilePicture(ParseFile file) {
+        put("profilePicture", file);
+    }
+
+    public ParseFile getProfilePicture() {
+        return getParseFile("profilePicture");
     }
 
     public String getFullName() {

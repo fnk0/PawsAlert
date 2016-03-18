@@ -2,10 +2,10 @@ package com.gabilheri.pawsalert.base;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
@@ -14,6 +14,7 @@ import com.gabilheri.pawsalert.R;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import uk.co.senab.photoview.PhotoView;
 
 /**
  * Created by <a href="mailto:marcus@gabilheri.com">Marcus Gabilheri</a>
@@ -42,14 +43,13 @@ public class ImagePagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View imageLayout = mInflater.inflate(R.layout.page_image, container, false);
-        AppCompatImageView imageView = ButterKnife.findById(imageLayout, R.id.image);
-
+        final PhotoView imageView = ButterKnife.findById(imageLayout, R.id.image);
+        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        imageView.setMaximumScale(100);
         Glide.with(mContext)
                 .load(imageUrls.get(position))
                 .into(imageView);
-
         container.addView(imageLayout);
-
         return imageLayout;
     }
 
