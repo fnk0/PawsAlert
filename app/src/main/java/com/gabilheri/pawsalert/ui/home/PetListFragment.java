@@ -5,10 +5,11 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 
-import com.gabilheri.pawsalert.R;
+import com.gabilheri.pawsalert.base.BaseActivity;
 import com.gabilheri.pawsalert.base.BaseRecyclerListFragment;
 import com.gabilheri.pawsalert.base.ItemCallback;
 import com.gabilheri.pawsalert.data.models.Animal;
@@ -24,8 +25,8 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
@@ -66,29 +67,44 @@ import timber.log.Timber;
         return fragment;
     }
 
+    public static PetListFragment newInstance(ArrayList<String> petIds) {
+        Bundle args = new Bundle();
+        args.putStringArrayList(Const.OBJECT_ID, petIds);
+        PetListFragment fragment = new PetListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mCurrentUser = (User) ParseUser.getCurrentUser();
         mPetAdapter = new PetAdapter(this);
-        Bundle args = getArguments();
-        mPetListType = args.getInt(PET_LIST_TYPE);
-        mShelterId = args.getString(SHELTER_ID);
         initGridCardsList(mPetAdapter);
         mBangAnimationView = BangAnimationView.attach2Window(getActivity());
 
-        if (mShelterId != null) {
-            AnimalShelter.getQuery()
-                    .whereEqualTo("objectId", mShelterId)
-                    .include("owner")
-                    .getFirstInBackground(new GetCallback<AnimalShelter>() {
-                        @Override
-                        public void done(AnimalShelter object, ParseException e) {
-                            queryData();
-                        }
-                    });
+        Bundle args = getArguments();
+        List<String> petIds = args.getStringArrayList(Const.OBJECT_ID);
+
+        if (petIds == null) {
+            mPetListType = args.getInt(PET_LIST_TYPE);
+            mShelterId = args.getString(SHELTER_ID);
+
+            if (mShelterId != null) {
+                AnimalShelter.getQuery()
+                        .whereEqualTo("objectId", mShelterId)
+                        .include("owner")
+                        .getFirstInBackground(new GetCallback<AnimalShelter>() {
+                            @Override
+                            public void done(AnimalShelter object, ParseException e) {
+                                queryData();
+                            }
+                        });
+            } else {
+                queryData();
+            }
         } else {
-            queryData();
+            queryIdList(petIds);
         }
     }
 
@@ -117,6 +133,19 @@ import timber.log.Timber;
 
     }
 
+    public void queryIdList(@NonNull List<String> petIds) {
+
+        List<ParseQuery<Animal>> mQueryList = new ArrayList<>();
+
+        for (String s : petIds) {
+            mQueryList.add(Animal.getQuery().whereEqualTo(Const.OBJECT_ID, s));
+        }
+
+        ParseQuery<Animal> mainQuery = ParseQuery.or(mQueryList);
+        mainQuery.include("user");
+        mainQuery.findInBackground(this);
+    }
+
     public ParseQuery<Animal> getQuery() {
         ParseQuery<Animal> query = Animal.getQuery()
                 .include("user")
@@ -131,32 +160,10 @@ import timber.log.Timber;
     public void onItemCallback(TransitionWrapperModel<Animal> item) {
         // If the model is null we just want to animate the view
         switch (item.getState()) {
-            case Const.ANIMAL_FAVORITE:
+            case Const.ANIMAL_CALL:
                 if (item.getView() instanceof AppCompatImageView) {
-                    AppCompatImageView view = (AppCompatImageView) item.getView();
-                    mBangAnimationView.bang(view);
-                    if (item.getModel().isFavorite()) {
-                        view.setImageResource(R.drawable.ic_action_favorite);
-                        Favorite.getQuery().getFirstInBackground(new GetCallback<Favorite>() {
-                            @Override
-                            public void done(Favorite object, ParseException e) {
-                                object.deleteInBackground();
-                                refreshFavorites();
-                            }
-                        });
-                    } else {
-                        view.setImageResource(R.drawable.ic_action_favorite_red);
-                        Favorite fav = new Favorite()
-                                .setUser(mCurrentUser)
-                                .setAnimal(item.getModel());
-                        fav.toParseObject(fav).saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                refreshFavorites();
-                            }
-                        });
-                    }
-                    item.getModel().setFavorite(!item.getModel().isFavorite());
+                    mBangAnimationView.bang(item.getView());
+                    ((BaseActivity) getActivity()).makePhoneCall(item.getModel().getUser().getPhoneNumber());
                 }
                 break;
             case Const.ANIMAL_OPEN:

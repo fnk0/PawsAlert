@@ -1,8 +1,10 @@
 package com.gabilheri.pawsalert.ui.shelter;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
@@ -22,7 +24,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
+import com.paypal.android.sdk.payments.PayPalPayment;
+import com.paypal.android.sdk.payments.PayPalService;
+import com.paypal.android.sdk.payments.PaymentActivity;
+import com.paypal.android.sdk.payments.PaymentConfirmation;
 
+import org.json.JSONException;
+
+import java.math.BigDecimal;
 import java.util.Locale;
 
 import butterknife.Bind;
@@ -60,8 +70,8 @@ public class ActivityShelterDetails extends BaseActivity
     @Bind(R.id.detailsTitle)
     AppCompatTextView mDetailsTitleTV;
 
-    @Bind(R.id.actionCall)
-    LinearLayout mActionCall;
+    @Bind(R.id.fabCall)
+    FloatingActionButton mActionCall;
 
     @Bind(R.id.actionShare)
     LinearLayout mActionShare;
@@ -72,10 +82,14 @@ public class ActivityShelterDetails extends BaseActivity
     @Bind(R.id.actionWeb)
     LinearLayout mActionWeb;
 
+    @Bind(R.id.actionDonate)
+    LinearLayout mActionDonate;
+
     GoogleMap mGoogleMap;
     AnimalShelter mAnimalShelter;
 
     String pObjectID;
+    PayPalConfiguration mPayPalConfiguration;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,6 +101,8 @@ public class ActivityShelterDetails extends BaseActivity
         mActionCall.setOnClickListener(this);
         mActionShare.setOnClickListener(this);
         mActionWeb.setOnClickListener(this);
+        mActionDonate.setOnClickListener(this);
+
         if (extras != null) {
             pObjectID = extras.getString(Const.OBJECT_ID);
 
@@ -96,6 +112,14 @@ public class ActivityShelterDetails extends BaseActivity
             ParseQuery<AnimalShelter> query = AnimalShelter.getQuery();
             query.include("owner");
             query.getInBackground(pObjectID, this);
+
+            mPayPalConfiguration = new PayPalConfiguration()
+                    .environment(PayPalConfiguration.ENVIRONMENT_NO_NETWORK)
+                    .clientId(Const.PAYPAL_CLIENT_ID);
+
+            Intent intent = new Intent(this, PayPalService.class);
+            intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, mPayPalConfiguration);
+            startService(intent);
 
             mMapView.onCreate(null);
             mMapView.getMapAsync(this);
@@ -120,6 +144,19 @@ public class ActivityShelterDetails extends BaseActivity
                 }
                 openURL(url);
                 break;
+            case R.id.actionDonate:
+                PayPalPayment payment = new PayPalPayment(new BigDecimal("1.75"), "USD", "sample item",
+                        PayPalPayment.PAYMENT_INTENT_SALE);
+
+                Intent intent = new Intent(this, PaymentActivity.class);
+
+                // send the same configuration for restart resiliency
+                intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, mPayPalConfiguration);
+
+                intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payment);
+
+                startActivityForResult(intent, 0);
+                break;
         }
     }
 
@@ -128,6 +165,30 @@ public class ActivityShelterDetails extends BaseActivity
         Intent i = new Intent(this, ActivityShelterAnimals.class);
         i.putExtra(PetListFragment.SHELTER_ID, mAnimalShelter.getObjectId());
         startActivity(i);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            PaymentConfirmation confirm = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+            if (confirm != null) {
+                try {
+                    Timber.i(confirm.toJSONObject().toString(4));
+                    // TODO: send 'confirm' to your server for verification.
+                    // see https://developer.paypal.com/webapps/developer/docs/integration/mobile/verify-mobile-payment/
+                    // for more details.
+                } catch (JSONException e) {
+                    Timber.e(e, "an extremely unlikely failure occurred: " + e.getLocalizedMessage());
+                }
+            }
+        }
+        else if (resultCode == Activity.RESULT_CANCELED) {
+            showSnackbar("The user canceled.");
+        }
+        else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
+            showSnackbar("An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
+        }
     }
 
     @Override
@@ -159,6 +220,12 @@ public class ActivityShelterDetails extends BaseActivity
                 Timber.d("Error parsing lat/lng");
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        stopService(new Intent(this, PayPalService.class));
+        super.onDestroy();
     }
 
     @Override

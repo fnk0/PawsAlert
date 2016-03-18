@@ -9,12 +9,10 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.bumptech.glide.Glide;
 import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.base.BaseActivity;
 import com.gabilheri.pawsalert.data.models.Animal;
@@ -23,6 +21,8 @@ import com.gabilheri.pawsalert.data.models.User;
 import com.gabilheri.pawsalert.helpers.Const;
 import com.gabilheri.pawsalert.helpers.FileUriUtils;
 import com.gabilheri.pawsalert.helpers.PictureUtils;
+import com.gabilheri.pawsalert.ui.widgets.AddImageLayout;
+import com.gabilheri.pawsalert.ui.widgets.OnImageRemovedCallback;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -40,8 +40,8 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -57,7 +57,7 @@ import timber.log.Timber;
  * @since 1/20/16.
  */
 public class AddPetActivity extends BaseActivity
-        implements OnMapReadyCallback, RadioGroup.OnCheckedChangeListener {
+        implements OnMapReadyCallback, RadioGroup.OnCheckedChangeListener, OnImageRemovedCallback {
 
     int PLACE_PICKER_REQUEST = 1498;
     int PHOTO_PICKER_REQUEST = 1499;
@@ -113,11 +113,11 @@ public class AddPetActivity extends BaseActivity
     LinearLayout mLastLayout;
     LatLng mSelectedLocation;
 
-    List<String> mPhotos;
     int mUploaded = 0;
     Animal mAnimal;
     AnimalShelter mAnimalShelter;
     User mCurrentUser;
+    HashMap<String, AddImageLayout> mPhotos;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -125,7 +125,7 @@ public class AddPetActivity extends BaseActivity
         enableBackNav();
         enableActivityTransition();
         mPetNameEditText.setHint(R.string.pet_name);
-        mPhotos = new ArrayList<>();
+        mPhotos = new HashMap<>();
         mSegmentMissing.setOnCheckedChangeListener(this);
         mCurrentUser = (User) ParseUser.getCurrentUser();
         AnimalShelter.getQuery()
@@ -149,6 +149,35 @@ public class AddPetActivity extends BaseActivity
             e.printStackTrace();
         } catch (GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onImageRemoved(String path) {
+
+        for (Map.Entry<String, AddImageLayout> entry : mPhotos.entrySet()) {
+            removeViewFromParent(entry.getValue());
+        }
+
+        mPhotos.remove(path);
+        removeViewsFromViewGroup(mPhotosLayout);
+
+        for (Map.Entry<String, AddImageLayout> entry : mPhotos.entrySet()) {
+            addImageToPhotoLayout(entry.getValue());
+        }
+    }
+
+    public void removeViewFromParent(View v) {
+        if (v.getParent() != null) {
+            ((ViewGroup) v.getParent()).removeView(v);
+        }
+    }
+
+    public void removeViewsFromViewGroup(ViewGroup viewGroup) {
+        int count = viewGroup.getChildCount();
+        for (int i = 0; i < count; i++) {
+            View v = viewGroup.getChildAt(i);
+            viewGroup.removeView(v);
         }
     }
 
@@ -192,31 +221,36 @@ public class AddPetActivity extends BaseActivity
                 Uri imageURI = data.getData();
                 String filePath = FileUriUtils.getPath(imageURI);
 
-                ImageView v = new ImageView(this);
-                v.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                v.setId(mPhotos.size());
-
-                Glide.with(this)
-                        .load(filePath)
-                        .into(v);
-
-                int picSize = mPhotosLayout.getWidth() / 2;
-
-                LinearLayout.LayoutParams pictureParams = new LinearLayout.LayoutParams(picSize, picSize);
-
-                if (mPhotos.size() % 2 == 0) {
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    mLastLayout = new LinearLayout(this);
-                    mLastLayout.setOrientation(LinearLayout.HORIZONTAL);
-                    mLastLayout.setLayoutParams(layoutParams);
-                    mPhotosLayout.addView(mLastLayout);
+                if (mPhotos.containsKey(filePath)) {
+                    showSnackbar("This photo has already been added.");
+                    return;
                 }
 
-                mLastLayout.addView(v, pictureParams);
-                mPhotos.add(filePath);
+                AddImageLayout addImageLayout = new AddImageLayout(this);
+                addImageLayout.setCallback(this)
+                        .setImagePath(filePath);
+
+                addImageToPhotoLayout(addImageLayout);
+                mPhotos.put(filePath, addImageLayout);
             }
         }
+    }
+
+    public void addImageToPhotoLayout(AddImageLayout addImageLayout) {
+        int picSize = mPhotosLayout.getWidth() / 2;
+
+        LinearLayout.LayoutParams pictureParams = new LinearLayout.LayoutParams(picSize, picSize);
+
+        if (mPhotos.size() % 2 == 0) {
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            mLastLayout = new LinearLayout(this);
+            mLastLayout.setOrientation(LinearLayout.HORIZONTAL);
+            mLastLayout.setLayoutParams(layoutParams);
+            mPhotosLayout.addView(mLastLayout);
+        }
+
+        mLastLayout.addView(addImageLayout, pictureParams);
     }
 
     @Override
@@ -269,8 +303,8 @@ public class AddPetActivity extends BaseActivity
 
         showProgressDialog("Adding pet listing...", null);
 
-        for (String s : mPhotos) {
-            ParseFile file = PictureUtils.getParseFileFromPath(s, mAnimal.getName(), String.valueOf(mUploaded));
+        for (Map.Entry<String, AddImageLayout> s : mPhotos.entrySet()) {
+            ParseFile file = PictureUtils.getParseFileFromPath(s.getKey(), mAnimal.getName(), String.valueOf(mUploaded));
             mAnimal.addPhoto(file);
             file.saveInBackground(new SaveCallback() {
                 @Override

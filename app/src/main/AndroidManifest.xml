@@ -61,6 +61,8 @@
 
         <activity android:name=".ui.success.ActivitySuccessDetail" />
 
+        <activity android:name=".ui.notification.ActivityNotificationPetList" />
+
         <activity
             android:name=".ui.details.ActivityPictures"
             android:theme="@style/Theme.Paws.Black"

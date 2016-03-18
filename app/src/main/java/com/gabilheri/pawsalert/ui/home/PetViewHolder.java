@@ -26,8 +26,8 @@ import butterknife.ButterKnife;
  */
 public class PetViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    @Bind(R.id.actionFavorite)
-    AppCompatImageView mActionFavorite;
+    @Bind(R.id.actionCall)
+    AppCompatImageView mActionCall;
 
     @Bind(R.id.actionShare)
     AppCompatImageView mActionShare;
@@ -56,7 +56,7 @@ public class PetViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         ButterKnife.bind(this, itemView);
         mAnimalItemCallback = animalItemCallback;
         mBtnMore.setOnClickListener(this);
-        mActionFavorite.setOnClickListener(this);
+        mActionCall.setOnClickListener(this);
         mActionShare.setOnClickListener(this);
     }
 
@@ -69,15 +69,14 @@ public class PetViewHolder extends RecyclerView.ViewHolder implements View.OnCli
                 .into(mPetImage);
         mPetName.setText(mAnimal.getName());
         mPetGender.setImageResource(Animal.getDrawableForGender(mAnimal.getGender()));
-        mActionFavorite.setImageResource(mAnimal.isFavorite() ? R.drawable.ic_action_favorite_red : R.drawable.ic_action_favorite);
         mCreatedAt.setText(DateFormatter.prettyFormat(animal.getCreatedAt()));
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.actionFavorite:
-                mAnimalItemCallback.onItemCallback(new TransitionWrapperModel<>(mAnimal, mActionFavorite, Const.ANIMAL_FAVORITE));
+            case R.id.actionCall:
+                mAnimalItemCallback.onItemCallback(new TransitionWrapperModel<>(mAnimal, mActionCall, Const.ANIMAL_CALL));
                 break;
             case R.id.actionShare:
                 mAnimalItemCallback.onItemCallback(new TransitionWrapperModel<>(mAnimal, mActionShare, Const.ANIMAL_SHARE));

@@ -63,12 +63,13 @@
             android:paddingRight="8dp">
 
             <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/actionFavorite"
+                android:id="@+id/actionCall"
                 android:layout_width="48dp"
                 android:scaleType="centerInside"
                 android:layout_height="match_parent"
                 android:background="?android:attr/selectableItemBackground"
-                android:src="@drawable/ic_action_favorite"/>
+                android:tint="@color/primary"
+                android:src="@drawable/ic_call"/>
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/actionShare"

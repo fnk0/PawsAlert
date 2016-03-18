@@ -156,7 +156,7 @@ public class ActivityDetails extends BaseActivity
     }
 
     public void setImage(ImageView imgView, boolean checked) {
-        imgView.setImageResource(checked ? R.drawable.ic_checked : R.drawable.ic_unchecked);
+        imgView.setImageResource(checked ? R.drawable.ic_check_yes : R.drawable.ic_check_no);
     }
 
     @OnClick(R.id.seeMorePhotos)

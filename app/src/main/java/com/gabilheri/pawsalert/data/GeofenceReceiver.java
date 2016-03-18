@@ -12,6 +12,7 @@ import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.data.models.Animal;
 import com.gabilheri.pawsalert.helpers.Const;
 import com.gabilheri.pawsalert.ui.details.ActivityDetails;
+import com.gabilheri.pawsalert.ui.notification.ActivityNotificationPetList;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 import com.parse.FindCallback;
@@ -33,7 +34,7 @@ import timber.log.Timber;
 public class GeofenceReceiver extends WakefulBroadcastReceiver implements FindCallback<Animal> {
 
     final static String GROUP_PETS_MISSING = "group_pets_missing";
-
+    final  static int GROUP_NOTIFICATION_ID = 8791;
     Context mContext;
 
     @Override
@@ -78,13 +79,17 @@ public class GeofenceReceiver extends WakefulBroadcastReceiver implements FindCa
 
     @Override
     public void done(List<Animal> objects, ParseException e) {
+        // Nuke all previous notifications and generate unique ids
+        NotificationManagerCompat.from(mContext).cancelAll();
         if (e == null) {
-
             List<Notification> notifications = new ArrayList<>();
             int[] ids = new int[objects.size()];
             int counter = 0;
+            ArrayList<String> objectIds = new ArrayList<>();
             for(Animal a : objects) {
                 Animal animal = a.fromParseObject(a);
+
+                objectIds.add(animal.getObjectId());
 
                 int notificationID = animal.getObjectId().hashCode();
                 Intent intent = new Intent(mContext, ActivityDetails.class);
@@ -99,7 +104,7 @@ public class GeofenceReceiver extends WakefulBroadcastReceiver implements FindCa
                 // Build the notification, setting the group appropriately
                 Notification notif = new NotificationCompat.Builder(mContext)
                         .setContentTitle("Missing Pet: " + animal.getName())
-                        .setContentText("Tap for more details.")
+                        .setContentText("Type: " + animal.getPetType())
                         .setSmallIcon(R.drawable.ic_paw_print)
                         .setGroup(GROUP_PETS_MISSING)
                         .setContentIntent(contentIntent)
@@ -107,16 +112,35 @@ public class GeofenceReceiver extends WakefulBroadcastReceiver implements FindCa
 
                 notifications.add(notif);
             }
-            sendNotification(notifications, ids);
+            sendNotification(notifications, ids, objectIds);
         } else {
             Timber.e(e, "Error fetching data: " + e.getLocalizedMessage());
         }
     }
 
-    public void sendNotification(List<Notification> notifications, int[] ids) {
+    public void sendNotification(List<Notification> notifications, int[] ids, ArrayList<String> objectIds) {
 
-        // Issue the notification
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mContext);
+
+        if (notifications.size() > 1) {
+            Intent intent = new Intent(mContext, ActivityNotificationPetList.class);
+            intent.putExtra(Const.OBJECT_ID, objectIds);
+            intent.putExtra(Const.NOTIFICATION_ID, GROUP_NOTIFICATION_ID);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent contentIntent = PendingIntent.getActivity(mContext, ids.length + 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            // Group notification that will be visible on the phone
+            Notification summaryNotification = new NotificationCompat.Builder(mContext)
+                    .setContentTitle("There are " + notifications.size() + " pets missing in your area.")
+                    .setSmallIcon(R.drawable.ic_paw_print)
+                    .setGroup(GROUP_PETS_MISSING)
+                    .setGroupSummary(true)
+                    .setContentIntent(contentIntent)
+                    .build();
+
+            // Issue the notification
+            notificationManager.notify(GROUP_NOTIFICATION_ID, summaryNotification);
+        }
 
         for(int i = 0; i < notifications.size(); i++) {
             notificationManager.notify(ids[i],notifications.get(i));
