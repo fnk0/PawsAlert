@@ -287,6 +287,7 @@ public class AddPetActivity extends BaseActivity
         mAnimal.setLatitude(mSelectedLocation.latitude);
         mAnimal.setOtherInfo(mPetDetailsEditText.getText().toString());
         mAnimal.setUser(mCurrentUser);
+        mAnimal.setDisabled(false);
 
         if (mAnimalShelter != null) {
             mAnimal.setAnimalShelter(mAnimalShelter);

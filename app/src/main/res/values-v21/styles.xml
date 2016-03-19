@@ -10,7 +10,11 @@
         <item name="android:windowBackground">@color/window_background</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="android:listSeparatorTextViewStyle">@style/Theme.Paws.ListSeparatorTextView</item>
+        <item name="android:activatedBackgroundIndicator">?android:attr/selectableItemBackground</item>
+
         <item name="android:windowSharedElementEnterTransition">@transition/shared_element_enter</item>
         <item name="android:windowContentTransitions">true</item>
         <!-- enable overlapping of exiting and entering activities-->
@@ -40,6 +44,22 @@
 
     <style name="ColorSwitchTeal">
         <item name="colorControlActivated">@color/teal_500</item>
+    </style>
+
+
+    <style name="Preference_TextAppearanceMaterialBody2">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="Theme.Paws.ListSeparatorTextView">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/accent_color</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
     </style>
 
 

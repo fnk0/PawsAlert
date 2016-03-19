@@ -4,11 +4,14 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatEditText;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.base.BaseActivity;
 import com.gabilheri.pawsalert.helpers.Const;
@@ -17,6 +20,7 @@ import com.gabilheri.pawsalert.ui.home.HomeActivity;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.RequestPasswordResetCallback;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -85,6 +89,33 @@ public class SignInActivity extends BaseActivity implements LogInCallback{
             Timber.e(e, e.getLocalizedMessage());
             showSnackbar("Error signing in. Email or password invalid.");
         }
+    }
+
+    @OnClick(R.id.forgotPassword)
+    public void forgotPassword(View v) {
+        new MaterialDialog.Builder(this)
+                .title("Forgot Password")
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input("Email", "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        String validation = ValidationUtils.isValidEmailAddress(input.toString());
+                        if (validation == null) {
+                            ParseUser.requestPasswordResetInBackground(input.toString(), new RequestPasswordResetCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                        showSnackbar("Successfully reset the password. Check your email.");
+                                    } else {
+                                        showSnackbar("Oops! Something went wrong. Try again later.");
+                                    }
+                                }
+                            });
+                        } else {
+                            showSnackbar(validation);
+                        }
+                    }
+                }).show();
     }
 
     @OnClick(R.id.signUp)

@@ -170,6 +170,7 @@ import timber.log.Timber;
         ParseQuery<Animal> query = Animal.getQuery()
                 .orderByDescending("createdAt")
                 .include("user")
+                .whereEqualTo("isDisabled", false)
                 .whereEqualTo("missing", mPetListType == FRAGMENT_MISSING);
         if (mAnimalShelter != null) {
             query.whereEqualTo("animalShelter", mAnimalShelter);

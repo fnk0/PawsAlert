@@ -32,6 +32,7 @@ public class Animal extends BaseParseClass<Animal> {
     boolean vaccinations;
     boolean missing;
     boolean isNeutered;
+    boolean isDisabled;
     double latitude;
     double longitude;
     String adoptionFee;
@@ -161,6 +162,15 @@ public class Animal extends BaseParseClass<Animal> {
             photos = new ArrayList<>();
         }
         photos.add(f);
+    }
+
+    public boolean isDisabled() {
+        return isDisabled;
+    }
+
+    public Animal setDisabled(boolean disabled) {
+        isDisabled = disabled;
+        return this;
     }
 
     public AnimalShelter getAnimalShelter() {

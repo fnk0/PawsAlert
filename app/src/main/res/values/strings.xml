@@ -79,5 +79,6 @@
         Paws Alert watches for the location of missing pets and notifies the user if there is a missing pet in the area.
         The technology used to provide this kind of information is called Geofences.
     </string>
+    <string name="forgot_password">Forgot password?</string>
 
 </resources>
