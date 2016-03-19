@@ -74,11 +74,13 @@ public class StoryViewHolder extends RecyclerView.ViewHolder implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.actionShare:
+                mItemCallback.onItemCallback(new TransitionWrapperModel<>(mSuccessStory, v, ActivitySuccessStory.SHARE_STORY));
                 break;
             case R.id.actionLike:
+                mItemCallback.onItemCallback(new TransitionWrapperModel<>(mSuccessStory, v, ActivitySuccessStory.LIKE_STORY));
                 break;
             case R.id.btnMore:
-                mItemCallback.onItemCallback(new TransitionWrapperModel<>(mSuccessStory, mStoryImage, ActivitySuccessStory.OPEN_STORY));
+                mItemCallback.onItemCallback(new TransitionWrapperModel<>(mSuccessStory, v, ActivitySuccessStory.OPEN_STORY));
                 break;
         }
     }

@@ -72,6 +72,20 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.other.AboutActivity">
+            <intent-filter>
+                <action android:name="action.About"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ui.other.OpenSourceLicensesActivity">
+            <intent-filter>
+                <action android:name="action.OpenSource"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".ui.details.ActivityPictures"
             android:theme="@style/Theme.Paws.Black"

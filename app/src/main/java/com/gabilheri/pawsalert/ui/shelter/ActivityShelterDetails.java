@@ -154,6 +154,7 @@ public class ActivityShelterDetails extends BaseActivity
                 makePhoneCall(mAnimalShelter.getPhoneNumber());
                 break;
             case R.id.actionShare:
+                shareURL("http://www.stillwaterpaws.com/shelter.html?id=" + mAnimalShelter.getObjectId());
                 break;
             case R.id.actionEmail:
                 sendEmail(mAnimalShelter.getEmail());

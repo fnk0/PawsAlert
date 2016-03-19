@@ -13,9 +13,12 @@ import com.gabilheri.pawsalert.base.BaseDrawerActivity;
 import com.gabilheri.pawsalert.base.ItemCallback;
 import com.gabilheri.pawsalert.data.models.SuccessStory;
 import com.gabilheri.pawsalert.data.models.TransitionWrapperModel;
+import com.gabilheri.pawsalert.data.models.User;
 import com.gabilheri.pawsalert.helpers.Const;
+import com.gabilheri.pawsalert.ui.animations.BangAnimationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -34,18 +37,27 @@ public class ActivitySuccessStory extends BaseDrawerActivity
     public static final int ADD_STORY = 9862;
     public static final int OPEN_STORY = 9621;
     public static final int LIKE_STORY = 3214;
+    public static final int SHARE_STORY = 3215;
+
 
     @Bind(R.id.recyclerview)
     RecyclerView mRecyclerView;
 
     StoryAdapter mStoryAdapter;
+    BangAnimationView mBangAnimationView;
+
+    User mCurrentUser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.success_stories));
         mNavigationView.setCheckedItem(R.id.stories);
-        enableFab(true, this);
+
+        mCurrentUser = (User) ParseUser.getCurrentUser();
+
+        enableFab(mCurrentUser != null, this);
+        mBangAnimationView = BangAnimationView.attach2Window(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mStoryAdapter = new StoryAdapter(this);
         mRecyclerView.setAdapter(mStoryAdapter);
@@ -63,6 +75,7 @@ public class ActivitySuccessStory extends BaseDrawerActivity
 
     @Override
     public void onItemCallback(TransitionWrapperModel<SuccessStory> item) {
+
         switch (item.getState()) {
             case OPEN_STORY:
                 Intent intent = new Intent(this, ActivitySuccessDetail.class);
@@ -78,7 +91,14 @@ public class ActivitySuccessStory extends BaseDrawerActivity
 
                 break;
             case LIKE_STORY:
+                mBangAnimationView.bang(item.getView());
                 break;
+
+            case SHARE_STORY:
+                mBangAnimationView.bang(item.getView());
+                shareURL("http://www.stillwaterpaws.com/story.html?id=" + item.getModel().getObjectId());
+                break;
+
         }
     }
 
@@ -86,7 +106,9 @@ public class ActivitySuccessStory extends BaseDrawerActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            SuccessStory.getQuery().findInBackground(this);
+            SuccessStory.getQuery()
+                    .orderByDescending("createdAt")
+                    .findInBackground(this);
         }
     }
 

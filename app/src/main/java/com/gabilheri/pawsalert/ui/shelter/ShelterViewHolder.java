@@ -49,16 +49,16 @@ public class ShelterViewHolder extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.actionCall)
     public void call(View v) {
-
+        mTransitionWrapperModelItemCallback.onItemCallback(new TransitionWrapperModel<>(mAnimalShelter, v, ActivityShelters.CALL_SHELTER));
     }
 
     @OnClick(R.id.actionShare)
     public void share(View v) {
-
+        mTransitionWrapperModelItemCallback.onItemCallback(new TransitionWrapperModel<>(mAnimalShelter, v, ActivityShelters.SHARE_SHELTER));
     }
 
     @OnClick(R.id.btnMore)
     public void seeMore(View v) {
-        mTransitionWrapperModelItemCallback.onItemCallback(new TransitionWrapperModel<>(mAnimalShelter, mShelterImageIV, 0));
+        mTransitionWrapperModelItemCallback.onItemCallback(new TransitionWrapperModel<>(mAnimalShelter, v, ActivityShelters.VIEW_SHELTER));
     }
 }

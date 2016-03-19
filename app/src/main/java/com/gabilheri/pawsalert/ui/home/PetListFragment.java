@@ -105,6 +105,7 @@ import timber.log.Timber;
                 AnimalShelter.getQuery()
                         .whereEqualTo("objectId", mShelterId)
                         .include("owner")
+                        .orderByDescending("createdAt")
                         .getFirstInBackground(new GetCallback<AnimalShelter>() {
                             @Override
                             public void done(AnimalShelter object, ParseException e) {
@@ -126,6 +127,7 @@ import timber.log.Timber;
         mPetAdapter.clear();
         if (mPetListType == FRAGMENT_FAVORITE) {
             Favorite.getQuery()
+                    .orderByDescending("createdAt")
                     .include("animal")
                     .include("user")
                     .findInBackground(new FindCallback<Favorite>() {
@@ -161,6 +163,7 @@ import timber.log.Timber;
 
     public ParseQuery<Animal> getQuery() {
         ParseQuery<Animal> query = Animal.getQuery()
+                .orderByDescending("createdAt")
                 .include("user")
                 .whereEqualTo("missing", mPetListType == FRAGMENT_MISSING);
         if (mAnimalShelter != null) {
@@ -173,6 +176,7 @@ import timber.log.Timber;
         Animal.getQuery()
                 .whereEqualTo("user", ParseUser.getCurrentUser())
                 .include("user")
+                .orderByDescending("createdAt")
                 .findInBackground(this);
     }
 
@@ -201,12 +205,7 @@ import timber.log.Timber;
                 break;
             case Const.ANIMAL_SHARE:
                 mBangAnimationView.bang(item.getView());
-                Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_TEXT,
-                        "http://www.stillwaterpaws.com/pet.html?id=" + item.getModel().getObjectId());
-                shareIntent.setType("text/plain");
-                startActivity(Intent.createChooser(shareIntent, "Share"));
+                ((BaseActivity) getActivity()).shareURL("http://www.stillwaterpaws.com/pet.html?id=" + item.getModel().getObjectId());
                 break;
         }
     }

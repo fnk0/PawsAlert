@@ -72,5 +72,12 @@
     <string name="change_password">Change Password</string>
     <string name="edit_account">Edit Account</string>
     <string name="save_changes">Save Changes</string>
+    <string name="open_source_licenses">Open Source Licenses</string>
+    <string name="about_text">
+        Paws alert was developed by Marcus Gabilheri for the Oklahoma State University 2016 App Competition.
+        The application was developed with the City of Stillwater for its own use. Tyler Weppler gave the original idea for the application.
+        Paws Alert watches for the location of missing pets and notifies the user if there is a missing pet in the area.
+        The technology used to provide this kind of information is called Geofences.
+    </string>
 
 </resources>

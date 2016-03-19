@@ -15,6 +15,7 @@ import com.gabilheri.pawsalert.data.models.AnimalShelter;
 import com.gabilheri.pawsalert.data.models.TransitionWrapperModel;
 import com.gabilheri.pawsalert.data.models.User;
 import com.gabilheri.pawsalert.helpers.Const;
+import com.gabilheri.pawsalert.ui.animations.BangAnimationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -34,6 +35,9 @@ public class ActivityShelters extends BaseDrawerActivity implements ItemCallback
         FindCallback<AnimalShelter>, View.OnClickListener {
 
     public static final int ADD_SHELTER = 9862;
+    public static final int VIEW_SHELTER = 730;
+    public static final int SHARE_SHELTER = 731;
+    public static final int CALL_SHELTER = 732;
 
     @Bind(R.id.recyclerview)
     RecyclerView mRecyclerView;
@@ -41,17 +45,19 @@ public class ActivityShelters extends BaseDrawerActivity implements ItemCallback
     ShelterAdapter mShelterAdapter;
     User mCurrentUser;
     boolean hasAnimalShelter = false;
+    protected BangAnimationView mBangAnimationView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        enableFab(true, this);
         setTitle(getString(R.string.shelters));
         mNavigationView.setCheckedItem(R.id.shelter);
         mShelterAdapter = new ShelterAdapter(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mShelterAdapter);
         mCurrentUser = (User) ParseUser.getCurrentUser();
+        enableFab(mCurrentUser != null, this);
+        mBangAnimationView = BangAnimationView.attach2Window(this);
         queryData();
     }
 
@@ -70,16 +76,27 @@ public class ActivityShelters extends BaseDrawerActivity implements ItemCallback
 
     @Override
     public void onItemCallback(TransitionWrapperModel<AnimalShelter> item) {
-        AnimalShelter shelter = item.getModel();
-        Intent intent = new Intent(this, ActivityShelterDetails.class);
-        intent.putExtra(Const.OBJECT_ID, shelter.getObjectId());
-        String picUrl = shelter.getCoverPhoto().getUrl();
-        intent.putExtra(Const.IMAGE_EXTRA, picUrl);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, item.getView(), Const.IMAGE_EXTRA);
-            startActivity(intent, options.toBundle());
-        } else {
-            startActivity(intent);
+        mBangAnimationView.bang(item.getView());
+        switch (item.getState()) {
+            case VIEW_SHELTER:
+                AnimalShelter shelter = item.getModel();
+                Intent intent = new Intent(this, ActivityShelterDetails.class);
+                intent.putExtra(Const.OBJECT_ID, shelter.getObjectId());
+                String picUrl = shelter.getCoverPhoto().getUrl();
+                intent.putExtra(Const.IMAGE_EXTRA, picUrl);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, item.getView(), Const.IMAGE_EXTRA);
+                    startActivity(intent, options.toBundle());
+                } else {
+                    startActivity(intent);
+                }
+                break;
+            case SHARE_SHELTER:
+                shareURL("http://www.stillwaterpaws.com/shelter.html?id=" + item.getModel().getObjectId());
+                break;
+            case CALL_SHELTER:
+                makePhoneCall(item.getModel().getPhoneNumber());
+                break;
         }
     }
 
@@ -105,8 +122,10 @@ public class ActivityShelters extends BaseDrawerActivity implements ItemCallback
             AnimalShelter as = objects.get(i);
             as = as.fromParseObject(as);
 
-            if (as.getOwner().getObjectId().equals(mCurrentUser.getObjectId())) {
-                hasAnimalShelter = true;
+            if (as.getOwner() != null && mCurrentUser != null) {
+                if (as.getOwner().getObjectId().equals(mCurrentUser.getObjectId())) {
+                    hasAnimalShelter = true;
+                }
             }
 
             objects.set(i, as);

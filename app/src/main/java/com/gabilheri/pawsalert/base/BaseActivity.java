@@ -296,6 +296,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void shareURL(String url) {
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, url);
+        shareIntent.setType("text/plain");
+        startActivity(Intent.createChooser(shareIntent, "Share"));
+    }
+
     @Override
     public void finishAfterTransition() {
         super.finishAfterTransition();

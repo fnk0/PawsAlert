@@ -16,10 +16,16 @@
             android:icon="@drawable/ic_action_home"
             android:title="@string/shelters"/>
 
-        <item
-            android:id="@+id/volunteer"
-            android:icon="@drawable/ic_volunteer"
-            android:title="@string/volunteer"/>
+        <!--<item-->
+            <!--android:id="@+id/volunteer"-->
+            <!--android:icon="@drawable/ic_volunteer"-->
+            <!--android:ti
+
+
+
+
+
+            tle="@string/volunteer"/>-->
 
         <item
             android:id="@+id/stories"
