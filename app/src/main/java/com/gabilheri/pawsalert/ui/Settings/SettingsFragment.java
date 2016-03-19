@@ -2,7 +2,7 @@ package com.gabilheri.pawsalert.ui.settings;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.Preference;
+import android.support.v7.preference.Preference;
 import android.view.View;
 
 import com.gabilheri.pawsalert.R;
@@ -35,6 +35,9 @@ public class SettingsFragment extends BaseSettingsFragment implements Preference
         if (mUser == null) {
             mUserPref.setTitle("Sign In");
         }
+
+        Preference distancePref = findPreference("notification_range");
+        bindPreferenceSummaryToValue(distancePref);
     }
 
     @Override
@@ -47,8 +50,12 @@ public class SettingsFragment extends BaseSettingsFragment implements Preference
                 startActivity(new Intent(getActivity(), UserProfileActivity.class));
             }
         }
-
         return true;
+    }
+
+    @Override
+    public void onCreatePreferences(Bundle bundle, String s) {
+
     }
 
     @Override

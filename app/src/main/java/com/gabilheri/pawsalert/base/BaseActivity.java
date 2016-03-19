@@ -120,6 +120,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.container, fragment).addToBackStack(backStack).commit();
     }
 
+    public void addSupportFragmentTocontainer(android.support.v4.app.Fragment supportFragment) {
+        android.support.v4.app.FragmentTransaction supportTransaction = getSupportFragmentManager().beginTransaction();
+        supportTransaction.replace(R.id.container, supportFragment).addToBackStack("frag").commit();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home && isBackNav) {

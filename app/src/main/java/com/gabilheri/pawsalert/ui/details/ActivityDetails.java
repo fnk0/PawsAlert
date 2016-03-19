@@ -4,10 +4,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.SwitchCompat;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,6 +32,7 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -75,10 +81,43 @@ public class ActivityDetails extends BaseActivity
     @Bind(R.id.adoptionFee)
     AppCompatTextView mAdoptionFeeTV;
 
+    @Bind(R.id.fabCall)
+    FloatingActionButton mFab;
+
+    @Bind(R.id.card_info)
+    CardView mCardInfo;
+
+    // EDIT STUFF
+    @Bind(R.id.editDetails)
+    AppCompatEditText mEditDetailsET;
+
+    @Bind(R.id.updateLocation)
+    Button mUpdateLocation;
+
+    @Bind(R.id.card_edit_info)
+    CardView mCardEditInfo;
+
+    @Bind(R.id.editHasMicrochip)
+    SwitchCompat mEditHasMicrochip;
+
+    @Bind(R.id.editHasVaccinations)
+    SwitchCompat mEditHasVaccinations;
+
+    @Bind(R.id.editIsNeutered)
+    SwitchCompat mEditIsNeutered;
+
+    @Bind(R.id.editPetAge)
+    AppCompatEditText mEditPetAge;
+
+    @Bind(R.id.editAdoptionFee)
+    AppCompatEditText mEditAdoptionFee;
+
     GoogleMap mGoogleMap;
     Animal mAnimal;
     String pObjectID;
     String mPictureUrl;
+    User mCurrentUser;
+    boolean isEditMode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,6 +139,12 @@ public class ActivityDetails extends BaseActivity
             }
         }
 
+        try {
+            mCurrentUser = (User) ParseUser.getCurrentUser();
+        } catch (Exception ex) {
+            Timber.e(ex, "Could not get Parse user...");
+        }
+
         if (pObjectID == null) {
             Uri data = getIntent().getData();
             if (data != null) {
@@ -117,12 +162,36 @@ public class ActivityDetails extends BaseActivity
         }
     }
 
+    public void changeFabIcon() {
+        mFab.setImageResource(isEditMode ? R.drawable.ic_action_done : R.drawable.ic_edit);
+        int color = getResources().getColor(isEditMode ? R.color.green_500 : R.color.accent_color);
+        mFab.setBackgroundColor(color);
+    }
+
     @OnClick(R.id.fabCall)
     public void call(View v) {
-        if (mAnimal != null) {
-            User u = mAnimal.getUser();
-            makePhoneCall(u.getPhoneNumber());
+        if (mCurrentUser != null && mCurrentUser.equals(mAnimal.getUser())) {
+            isEditMode = !isEditMode;
+            changeFabIcon();
+            if (isEditMode) {
+                // updatePet
+            }
+
+            // change views to edit mode
+            mCardEditInfo.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
+            mEditDetailsET.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
+            mUpdateLocation.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
+
+            mCardInfo.setVisibility(isEditMode ? View.GONE : View.VISIBLE);
+            mPetDetailsTV.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
+
+        } else {
+            if (mAnimal != null) {
+                User u = mAnimal.getUser();
+                makePhoneCall(u.getPhoneNumber());
+            }
         }
+
     }
 
     @Override
@@ -166,7 +235,7 @@ public class ActivityDetails extends BaseActivity
 
         ArrayList<String> urls = new ArrayList<>();
 
-        for(ParseFile pf : mAnimal.getPhotos()) {
+        for (ParseFile pf : mAnimal.getPhotos()) {
             urls.add(pf.getUrl());
         }
 

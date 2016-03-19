@@ -41,6 +41,16 @@
             app:liteMode="true"
             app:mapType="normal" />
 
+        <Button
+            android:id="@+id/updateLocation"
+            android:padding="16dp"
+            android:visibility="gone"
+            android:background="?android:attr/selectableItemBackground"
+            android:textColor="@color/primary_dark"
+            android:text="Update Location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
 
     </LinearLayout>
 

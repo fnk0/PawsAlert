@@ -2,7 +2,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/card_info"
+    android:id="@+id/card_edit_info"
+    android:visibility="gone"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
@@ -51,8 +52,8 @@
                 android:drawablePadding="8dp"
                 android:text="Adoption Fee" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/adoptionFee"
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/editAdoptionFee"
                 android:gravity="center|end|right"
                 android:layout_marginLeft="16dp"
                 android:textSize="16sp"
@@ -77,8 +78,8 @@
                 android:drawablePadding="8dp"
                 android:text="@string/age" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/petAge"
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/editPetAge"
                 android:gravity="center|end|right"
                 android:layout_marginLeft="16dp"
                 android:textSize="16sp"
@@ -104,12 +105,10 @@
                 android:textSize="16sp"
                 android:text="@string/has_vaccinations" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/hasVaccinations"
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/editHasVaccinations"
                 android:gravity="center"
                 android:layout_marginLeft="16dp"
-                android:textSize="16sp"
-                tools:src="@drawable/ic_check_no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -132,12 +131,10 @@
                 android:textSize="16sp"
                 android:text="@string/is_neutered" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/isNeutered"
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/editIsNeutered"
                 android:gravity="center"
                 android:layout_marginLeft="16dp"
-                android:textSize="16sp"
-                tools:src="@drawable/ic_check_no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -160,12 +157,10 @@
                 android:textSize="16sp"
                 android:text="@string/has_microchip" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/hasMicrochip"
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/editHasMicrochip"
                 android:gravity="center"
                 android:layout_marginLeft="16dp"
-                android:textSize="16sp"
-                android:src="@drawable/ic_check_no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

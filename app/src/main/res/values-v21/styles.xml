@@ -10,7 +10,7 @@
         <item name="android:windowBackground">@color/window_background</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="android:windowSharedElementEnterTransition">@transition/shared_element_enter</item>
         <item name="android:windowContentTransitions">true</item>
         <!-- enable overlapping of exiting and entering activities-->

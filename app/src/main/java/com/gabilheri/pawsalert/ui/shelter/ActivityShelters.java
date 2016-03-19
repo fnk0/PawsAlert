@@ -76,7 +76,6 @@ public class ActivityShelters extends BaseDrawerActivity implements ItemCallback
 
     @Override
     public void onItemCallback(TransitionWrapperModel<AnimalShelter> item) {
-        mBangAnimationView.bang(item.getView());
         switch (item.getState()) {
             case VIEW_SHELTER:
                 AnimalShelter shelter = item.getModel();
@@ -92,9 +91,11 @@ public class ActivityShelters extends BaseDrawerActivity implements ItemCallback
                 }
                 break;
             case SHARE_SHELTER:
+                mBangAnimationView.bang(item.getView());
                 shareURL("http://www.stillwaterpaws.com/shelter.html?id=" + item.getModel().getObjectId());
                 break;
             case CALL_SHELTER:
+                mBangAnimationView.bang(item.getView());
                 makePhoneCall(item.getModel().getPhoneNumber());
                 break;
         }

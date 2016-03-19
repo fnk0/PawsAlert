@@ -6,6 +6,7 @@
         <PreferenceScreen
             android:icon="@drawable/ic_account_grey"
             android:key="myAccount"
+            android:textSize="16sp"
             android:title="My Account">
         </PreferenceScreen>
 
@@ -18,24 +19,27 @@
     <!--<intent android:action="action.Reminders" />-->
     <!--</PreferenceScreen>-->
 
-    <PreferenceCategory android:title="App Settings">
+    <PreferenceCategory
+        android:title="App Settings">
 
         <EditTextPreference
             android:defaultValue="1"
-            android:dialogTitle="Calories Goal"
+            android:dialogTitle="Notification Range"
             android:icon="@drawable/ic_location"
             android:inputType="number"
             android:key="notification_range"
             android:numeric="decimal"
+            android:textSize="16sp"
             android:singleLine="true"
             android:summary="%s Miles."
             android:title="Notification Range"
             />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="true"
             android:icon="@drawable/ic_notifications"
             android:key="notifications_enale"
+            android:textSize="16sp"
             android:title="Enable Notifications"
             />
     </PreferenceCategory>
@@ -45,6 +49,7 @@
         <PreferenceScreen
             android:icon="@drawable/ic_action_info"
             android:key="about"
+            android:textSize="16sp"
             android:title="About">
             <intent android:action="action.About"/>
         </PreferenceScreen>
@@ -52,6 +57,7 @@
         <PreferenceScreen
             android:icon="@drawable/ic_action_android"
             android:key="openSource"
+            android:textSize="16sp"
             android:title="Open Source Licenses">
             <intent android:action="action.OpenSource"/>
         </PreferenceScreen>

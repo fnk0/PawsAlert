@@ -1,10 +1,10 @@
 package com.gabilheri.pawsalert.base;
 
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
+
+import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.PreferenceManager;
 
 /**
  * Created by <a href="mailto:marcus@gabilheri.com">Marcus Gabilheri</a>
@@ -13,7 +13,7 @@ import android.preference.PreferenceScreen;
  * @version 1.0
  * @since 3/18/16.
  */
-public class BaseSettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
+public abstract class BaseSettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
 
     private boolean mBindingPreference;
 
@@ -48,17 +48,14 @@ public class BaseSettingsFragment extends PreferenceFragment implements Preferen
                 preference.setSummary(listPreference.getEntries()[prefIndex]);
             }
         } else {
-            preference.setSummary(stringValue);
-
+            if(preference.getKey().equals("notification_range")) {
+                preference.setSummary(String.format("%s miles", stringValue));
+            } else {
+                preference.setSummary(stringValue);
+            }
         }
         return true;
     }
-
-    @Override
-    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-        return super.onPreferenceTreeClick(preferenceScreen, preference);
-    }
-
 
     @Override
     public void onResume() {

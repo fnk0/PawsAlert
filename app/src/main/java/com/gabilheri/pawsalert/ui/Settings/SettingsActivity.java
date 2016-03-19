@@ -19,7 +19,7 @@ public class SettingsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.settings));
         enableBackNav();
-        addFragmentToContainer(new SettingsFragment(), getString(R.string.settings));
+        addSupportFragmentTocontainer(new SettingsFragment());
     }
 
     @Override

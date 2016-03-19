@@ -88,7 +88,12 @@ import timber.log.Timber;
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mCurrentUser = (User) ParseUser.getCurrentUser();
+        try {
+            mCurrentUser = (User) ParseUser.getCurrentUser();
+        } catch (Exception ex) {
+
+        }
+
         mPetAdapter = new PetAdapter(this);
         initGridCardsList(mPetAdapter);
         mBangAnimationView = BangAnimationView.attach2Window(getActivity());

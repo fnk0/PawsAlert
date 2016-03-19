@@ -52,7 +52,12 @@ public abstract class BaseDrawerActivity extends BaseActivity implements View.On
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        mCurrentUser = (User) ParseUser.getCurrentUser();
+        try {
+            mCurrentUser = (User) ParseUser.getCurrentUser();
+        } catch (Exception ex) {
+            
+        }
+
         setupDrawerContent();
     }
 
