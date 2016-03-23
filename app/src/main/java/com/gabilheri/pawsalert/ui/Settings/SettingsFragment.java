@@ -2,7 +2,7 @@ package com.gabilheri.pawsalert.ui.settings;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.preference.Preference;
+import android.preference.Preference;
 import android.view.View;
 
 import com.gabilheri.pawsalert.R;
@@ -29,6 +29,7 @@ public class SettingsFragment extends BaseSettingsFragment implements Preference
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings);
         mUserPref = findPreference("myAccount");
+
         mUser = (User) ParseUser.getCurrentUser();
         mUserPref.setOnPreferenceClickListener(this);
 
@@ -53,10 +54,10 @@ public class SettingsFragment extends BaseSettingsFragment implements Preference
         return true;
     }
 
-    @Override
-    public void onCreatePreferences(Bundle bundle, String s) {
-
-    }
+//    @Override
+//    public void onCreatePreferences(Bundle bundle, String s) {
+//
+//    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {

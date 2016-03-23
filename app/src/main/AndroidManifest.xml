@@ -67,21 +67,21 @@
 
         <activity android:name=".ui.profile.UserProfileActivity">
             <intent-filter>
-                <action android:name="action.Account"/>
+                <action android:name="com.gabilheri.pawsalert.action.Account"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
         <activity android:name=".ui.other.AboutActivity">
             <intent-filter>
-                <action android:name="action.About"/>
+                <action android:name="com.gabilheri.pawsalert.action.About"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
         <activity android:name=".ui.other.OpenSourceLicensesActivity">
             <intent-filter>
-                <action android:name="action.OpenSource"/>
+                <action android:name="com.gabilheri.pawsalert.action.OpenSource"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>

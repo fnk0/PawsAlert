@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
 import com.gabilheri.pawsalert.R;
+import com.gabilheri.pawsalert.base.PrefManager;
 import com.gabilheri.pawsalert.data.models.Animal;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -33,6 +34,8 @@ import timber.log.Timber;
 public class ServiceUpdateGeofences extends IntentService
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    public static final float MILE = 1609.34f;
+
     GoogleApiClient mGoogleApiClient;
     List<Geofence> mGeofences;
     GeofencingRequest mGeofencingRequest;
@@ -50,10 +53,11 @@ public class ServiceUpdateGeofences extends IntentService
                     .include("user")
                     .find();
 
+            float radius = PrefManager.with(this).getFloat("notification_range", 1f) * MILE;
             for (Animal a : animals) {
                 a = a.fromParseObject(a);
                 Geofence geofence = new Geofence.Builder()
-                        .setCircularRegion(a.getLatitude(), a.getLongitude(), 1610) // 1 mile radius
+                        .setCircularRegion(a.getLatitude(), a.getLongitude(), radius)
                         .setRequestId(a.getObjectId()) // every fence must have an ID
                         .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT) // can also have DWELL
                         .setExpirationDuration(Geofence.NEVER_EXPIRE) // how long do we care about this geofence?
@@ -63,18 +67,19 @@ public class ServiceUpdateGeofences extends IntentService
                 mGeofences.add(geofence);
             }
 
-            mGeofencingRequest = new GeofencingRequest.Builder()
-                    .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
-                    .addGeofences(mGeofences)
-                    .build();
+            if (mGeofences.size() == 0) {
+                mGeofencingRequest = new GeofencingRequest.Builder()
+                        .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+                        .addGeofences(mGeofences)
+                        .build();
 
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(LocationServices.API)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .build();
-            mGoogleApiClient.connect();
-
+                mGoogleApiClient = new GoogleApiClient.Builder(this)
+                        .addApi(LocationServices.API)
+                        .addConnectionCallbacks(this)
+                        .addOnConnectionFailedListener(this)
+                        .build();
+                mGoogleApiClient.connect();
+            }
         } catch (ParseException ex) {
             Timber.e(ex, "Could not fetch animal data: " + ex.getLocalizedMessage());
         }

@@ -10,6 +10,7 @@ import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.base.BaseDrawerPagerActivity;
 import com.gabilheri.pawsalert.base.PrefManager;
 import com.gabilheri.pawsalert.data.GeofencesAlarm;
+import com.gabilheri.pawsalert.data.ServiceUpdateGeofences;
 import com.gabilheri.pawsalert.data.models.Animal;
 import com.gabilheri.pawsalert.helpers.Const;
 import com.gabilheri.pawsalert.ui.add.AddPetActivity;
@@ -32,6 +33,8 @@ import com.parse.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Created by <a href="mailto:marcus@gabilheri.com">Marcus Gabilheri</a>
@@ -69,6 +72,9 @@ public class HomeActivity extends BaseDrawerPagerActivity
             alarm.setAlarm(this);
             PrefManager.with(this).save(Const.SERVICE_STARTED, true);
         }
+
+        float radius = PrefManager.with(this).getFloat("notification_range", 1f) * ServiceUpdateGeofences.MILE;
+        Timber.d("Radius: " + radius);
 
         mMissingFragment = PetListFragment.newInstance(PetListFragment.FRAGMENT_MISSING, null);
         mAdoptFragment = PetListFragment.newInstance(PetListFragment.FRAGMENT_ADOPT, null);
@@ -126,10 +132,6 @@ public class HomeActivity extends BaseDrawerPagerActivity
         }
         initMap();
     }
-
-    //    public void refreshFavorites() {
-//        mFavoritesFragment.queryData();
-//    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

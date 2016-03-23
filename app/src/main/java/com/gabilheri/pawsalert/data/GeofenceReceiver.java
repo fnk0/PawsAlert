@@ -9,6 +9,7 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import android.support.v7.app.NotificationCompat;
 
 import com.gabilheri.pawsalert.R;
+import com.gabilheri.pawsalert.base.PrefManager;
 import com.gabilheri.pawsalert.data.models.Animal;
 import com.gabilheri.pawsalert.helpers.Const;
 import com.gabilheri.pawsalert.ui.details.ActivityDetails;
@@ -40,6 +41,11 @@ public class GeofenceReceiver extends WakefulBroadcastReceiver implements FindCa
     @Override
     public void onReceive(Context context, Intent intent) {
         Timber.d("onReceive(context, intent)");
+
+        if (!PrefManager.with(context).getBoolean("notifications_enale", true)) {
+            return;
+        }
+
         mContext = context;
         GeofencingEvent event = GeofencingEvent.fromIntent(intent);
         if(event != null){
@@ -57,7 +63,7 @@ public class GeofenceReceiver extends WakefulBroadcastReceiver implements FindCa
                     if (transition == Geofence.GEOFENCE_TRANSITION_ENTER
                             || transition == Geofence.GEOFENCE_TRANSITION_DWELL) {
                         // Entered Geofence area
-
+                        Timber.d("Entered Geofence area");
                         List<ParseQuery<Animal>> queries = new ArrayList<>();
                         for(String s : geofenceIds) {
                             ParseQuery<Animal> aQuery = Animal.getQuery()
@@ -71,6 +77,7 @@ public class GeofenceReceiver extends WakefulBroadcastReceiver implements FindCa
                     } else {
                         // Exited geofence area
                         Timber.d("Exited Geofence area.");
+//                        removeNotifications(context, geofenceIds);
                     }
                 }
             }
@@ -115,6 +122,13 @@ public class GeofenceReceiver extends WakefulBroadcastReceiver implements FindCa
             sendNotification(notifications, ids, objectIds);
         } else {
             Timber.e(e, "Error fetching data: " + e.getLocalizedMessage());
+        }
+    }
+
+    public void removeNotifications(Context c,  String[] objectIds) {
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(c);
+        for(String s : objectIds) {
+            notificationManager.cancel(s.hashCode());
         }
     }
 

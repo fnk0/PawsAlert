@@ -6,7 +6,6 @@
         <PreferenceScreen
             android:icon="@drawable/ic_account_grey"
             android:key="myAccount"
-            android:textSize="16sp"
             android:title="My Account">
         </PreferenceScreen>
 
@@ -26,20 +25,18 @@
             android:defaultValue="1"
             android:dialogTitle="Notification Range"
             android:icon="@drawable/ic_location"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:key="notification_range"
-            android:numeric="decimal"
-            android:textSize="16sp"
             android:singleLine="true"
             android:summary="%s Miles."
             android:title="Notification Range"
             />
 
-        <SwitchPreferenceCompat
+        <!--<SwitchPreferenceCompat-->
+        <SwitchPreference
             android:defaultValue="true"
             android:icon="@drawable/ic_notifications"
             android:key="notifications_enale"
-            android:textSize="16sp"
             android:title="Enable Notifications"
             />
     </PreferenceCategory>
@@ -49,17 +46,15 @@
         <PreferenceScreen
             android:icon="@drawable/ic_action_info"
             android:key="about"
-            android:textSize="16sp"
             android:title="About">
-            <intent android:action="action.About"/>
+            <intent android:action="com.gabilheri.pawsalert.action.About"/>
         </PreferenceScreen>
 
         <PreferenceScreen
             android:icon="@drawable/ic_action_android"
             android:key="openSource"
-            android:textSize="16sp"
             android:title="Open Source Licenses">
-            <intent android:action="action.OpenSource"/>
+            <intent android:action="com.gabilheri.pawsalert.action.OpenSource"/>
         </PreferenceScreen>
 
     </PreferenceCategory>

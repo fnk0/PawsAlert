@@ -283,8 +283,11 @@ public class AddPetActivity extends BaseActivity
         mAnimal.setNeutered(mIsNeutered.isChecked());
         mAnimal.setMicrochip(mHasMicrochip.isChecked());
         mAnimal.setVaccinations(mHasVaccinations.isChecked());
-        mAnimal.setLongitude(mSelectedLocation.longitude);
-        mAnimal.setLatitude(mSelectedLocation.latitude);
+        if (mSelectedLocation != null) {
+            mAnimal.setLongitude(mSelectedLocation.longitude);
+            mAnimal.setLatitude(mSelectedLocation.latitude);
+        }
+
         mAnimal.setOtherInfo(mPetDetailsEditText.getText().toString());
         mAnimal.setUser(mCurrentUser);
         mAnimal.setDisabled(false);

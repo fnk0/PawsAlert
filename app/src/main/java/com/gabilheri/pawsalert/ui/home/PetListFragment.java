@@ -60,6 +60,7 @@ import timber.log.Timber;
     AnimalShelter mAnimalShelter;
     protected BangAnimationView mBangAnimationView;
 
+
     public static PetListFragment newInstance(@PetListType int type, String shelterID) {
         Bundle args = new Bundle();
         PetListFragment fragment = new PetListFragment();
@@ -150,7 +151,6 @@ import timber.log.Timber;
         } else {
             getQuery().findInBackground(this);
         }
-
     }
 
     public void queryIdList(@NonNull List<String> petIds) {
@@ -174,6 +174,7 @@ import timber.log.Timber;
                 .whereEqualTo("missing", mPetListType == FRAGMENT_MISSING);
         if (mAnimalShelter != null) {
             query.whereEqualTo("animalShelter", mAnimalShelter);
+            query.whereEqualTo("isDisabled", false);
         }
         return query;
     }

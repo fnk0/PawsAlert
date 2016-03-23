@@ -1,10 +1,11 @@
 package com.gabilheri.pawsalert.base;
 
 
-import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
-import android.support.v7.preference.PreferenceManager;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
+
 
 /**
  * Created by <a href="mailto:marcus@gabilheri.com">Marcus Gabilheri</a>
@@ -13,7 +14,7 @@ import android.support.v7.preference.PreferenceManager;
  * @version 1.0
  * @since 3/18/16.
  */
-public abstract class BaseSettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
+public abstract class BaseSettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
 
     private boolean mBindingPreference;
 

@@ -372,7 +372,7 @@ public class ActivityDetails extends BaseActivity
     public void setLocation() {
         if (mAnimal != null && mGoogleMap != null) {
             try {
-                mMapView.removeAllViews();
+                mGoogleMap.clear();
                 LatLng loc = new LatLng(mAnimal.getLatitude(), mAnimal.getLongitude());
                 mGoogleMap.addMarker(new MarkerOptions().position(loc));
                 mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, mGoogleMap.getCameraPosition().zoom));
