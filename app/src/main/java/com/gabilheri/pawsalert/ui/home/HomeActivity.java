@@ -127,10 +127,17 @@ public class HomeActivity extends BaseDrawerPagerActivity
     @Override
     public void done(List<Animal> objects, ParseException e) {
         mItems.clear();
-        for(Animal a : objects) {
-            mItems.add(a.fromParseObject(a));
+
+        if (e != null) {
+            Timber.e(e, "Error loding data: " + e.getLocalizedMessage());
         }
-        initMap();
+
+        if (objects != null) {
+            for(Animal a : objects) {
+                mItems.add(a.fromParseObject(a));
+            }
+            initMap();
+        }
     }
 
     @Override

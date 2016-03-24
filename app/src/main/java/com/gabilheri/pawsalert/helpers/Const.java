@@ -13,9 +13,6 @@ public final class Const {
 
     }
 
-    public static final String PAYPAL_CLIENT_ID = "ARCnAKxQpPfshF0a3Pxc4qOIQoboebJ7C1p8-xl7xfw0DRuy_hef_YjW8w5ezPHlefdAJilrF45zAL--";
-    public static final String PAYPAL_CLIENT_SECRET = "EPKFv7mSAhLRLIegOvyEcOnhFj6TEDmgdBJC-9tc7EU66tF9eA0lvZG1AxCug1dgSwDnLLOny_HlILdO";
-
     /**
      * Preferences
      */

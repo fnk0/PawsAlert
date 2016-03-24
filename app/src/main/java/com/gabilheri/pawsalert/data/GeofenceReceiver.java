@@ -77,7 +77,7 @@ public class GeofenceReceiver extends WakefulBroadcastReceiver implements FindCa
                     } else {
                         // Exited geofence area
                         Timber.d("Exited Geofence area.");
-//                        removeNotifications(context, geofenceIds);
+                        removeNotifications(context, geofenceIds);
                     }
                 }
             }

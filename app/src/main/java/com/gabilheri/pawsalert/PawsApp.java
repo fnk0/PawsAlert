@@ -1,12 +1,15 @@
 package com.gabilheri.pawsalert;
 
 import android.app.Application;
+import android.content.Intent;
 
+import com.gabilheri.pawsalert.data.ServiceUpdateGeofences;
 import com.gabilheri.pawsalert.data.models.Animal;
 import com.gabilheri.pawsalert.data.models.AnimalShelter;
 import com.gabilheri.pawsalert.data.models.Favorite;
 import com.gabilheri.pawsalert.data.models.SuccessStory;
 import com.gabilheri.pawsalert.data.models.User;
+import com.gabilheri.pawsalert.helpers.Keys;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
@@ -29,7 +32,7 @@ public class PawsApp extends Application {
         Timber.plant(new Timber.DebugTree());
 
         Parse.enableLocalDatastore(this);
-        Parse.initialize(this, "Rh49lFj76OsfTBrChoM2wn55Lp0raNoMFNrj8LmJ", "k8ALeQtdeP5CZQtvKCWOim6JOC6c3jvG1v56GDaq");
+        Parse.initialize(this, Keys.PARSE_APPLICATION_ID, Keys.PARSE_KEY);
 
         ParseObject.registerSubclass(Animal.class);
         ParseObject.registerSubclass(Favorite.class);
@@ -37,6 +40,10 @@ public class PawsApp extends Application {
         ParseObject.registerSubclass(AnimalShelter.class);
         ParseObject.registerSubclass(SuccessStory.class);
         mInstance = this;
+
+        Intent service = new Intent(this, ServiceUpdateGeofences.class);
+        startService(service);
+
     }
 
     public static PawsApp instance() {

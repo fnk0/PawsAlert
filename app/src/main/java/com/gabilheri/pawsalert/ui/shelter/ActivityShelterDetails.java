@@ -20,6 +20,7 @@ import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.base.BaseActivity;
 import com.gabilheri.pawsalert.data.models.AnimalShelter;
 import com.gabilheri.pawsalert.helpers.Const;
+import com.gabilheri.pawsalert.helpers.Keys;
 import com.gabilheri.pawsalert.ui.home.PetListFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -136,7 +137,7 @@ public class ActivityShelterDetails extends BaseActivity
             mPayPalConfiguration = new PayPalConfiguration()
                     .merchantName(getString(R.string.app_name))
                     .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
-                    .clientId(Const.PAYPAL_CLIENT_ID);
+                    .clientId(Keys.PAYPAL_CLIENT_ID);
 
             Intent intent = new Intent(this, PayPalService.class);
             intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, mPayPalConfiguration);

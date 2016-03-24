@@ -1,9 +1,11 @@
 package com.gabilheri.pawsalert.helpers;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.RectF;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -11,7 +13,10 @@ import com.parse.ParseFile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
 
@@ -115,5 +120,34 @@ public final class PictureUtils {
             }
         }
         return bm;
+    }
+
+    public static String getImageUrlWithAuthority(Context context, Uri uri) {
+        InputStream is = null;
+        if (uri.getAuthority() != null) {
+            try {
+                is = context.getContentResolver().openInputStream(uri);
+                Bitmap bmp = BitmapFactory.decodeStream(is);
+                String title = "gabilheri_paws_" + new Date().getTime() + ".jpg";
+//                return FileUriUtils.writeToTempImageAndGetPathUri(context, bmp).toString();
+                try {
+                    return CacheManager.cacheImage(context, bmp, title);
+                } catch (IOException ex) {
+                    return null;
+                }
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }finally {
+                try {
+                    if (is != null) {
+                        is.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
 }

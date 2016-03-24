@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -12,6 +13,7 @@ import android.provider.MediaStore;
 
 import com.gabilheri.pawsalert.PawsApp;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Date;
 
@@ -23,6 +25,8 @@ import java.util.Date;
  * @since 9/22/15.
  */
 public final class FileUriUtils {
+
+    public static final String GOOGLE_URI = "com.google.android.apps.photos.contentprovider";
 
     public FileUriUtils() {}
 
@@ -222,6 +226,14 @@ public final class FileUriUtils {
             }
         }
         return mediaStorageDir;
+    }
+
+    public static Uri writeToTempImageAndGetPathUri(Context inContext, Bitmap inImage) {
+        String title = "gabilheri_paws_" + new Date().getTime() + ".jpg";
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, title, null);
+        return Uri.parse(path);
     }
 
     /**

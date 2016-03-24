@@ -134,7 +134,7 @@ public class AddPetActivity extends BaseActivity
                     @Override
                     public void done(AnimalShelter object, ParseException e) {
                         if (e == null && object != null) {
-                            mAnimalShelter = new AnimalShelter().fromParseObject(object);
+                            mAnimalShelter = object.fromParseObject(object);
                         }
                     }
                 });
@@ -219,19 +219,29 @@ public class AddPetActivity extends BaseActivity
                 MapsInitializer.initialize(this);
             } else if (requestCode == PHOTO_PICKER_REQUEST) {
                 Uri imageURI = data.getData();
+                String authority = imageURI.getAuthority();
                 String filePath = FileUriUtils.getPath(imageURI);
 
-                if (mPhotos.containsKey(filePath)) {
-                    showSnackbar("This photo has already been added.");
-                    return;
+                if(authority.equals(FileUriUtils.GOOGLE_URI) && filePath == null) {
+                    filePath = PictureUtils.getImageUrlWithAuthority(this, imageURI);
                 }
 
-                AddImageLayout addImageLayout = new AddImageLayout(this);
-                addImageLayout.setCallback(this)
-                        .setImagePath(filePath);
+                if (filePath != null) {
+                    if (mPhotos.containsKey(filePath)) {
+                        showSnackbar("This photo has already been added.");
+                        return;
+                    }
 
-                addImageToPhotoLayout(addImageLayout);
-                mPhotos.put(filePath, addImageLayout);
+                    AddImageLayout addImageLayout = new AddImageLayout(this);
+                    addImageLayout.setCallback(this)
+                            .setImagePath(filePath);
+
+                    addImageToPhotoLayout(addImageLayout);
+                    mPhotos.put(filePath, addImageLayout);
+                } else {
+                    showSnackbar("Error loading image. Please try another picture");
+                }
+
             }
         }
     }

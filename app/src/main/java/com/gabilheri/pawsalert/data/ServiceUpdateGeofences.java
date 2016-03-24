@@ -67,7 +67,7 @@ public class ServiceUpdateGeofences extends IntentService
                 mGeofences.add(geofence);
             }
 
-            if (mGeofences.size() == 0) {
+            if (mGeofences.size() != 0) {
                 mGeofencingRequest = new GeofencingRequest.Builder()
                         .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
                         .addGeofences(mGeofences)

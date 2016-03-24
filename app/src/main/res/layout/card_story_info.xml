@@ -145,7 +145,7 @@
             android:id="@+id/story"
             android:textSize="16sp"
             android:padding="8dp"
-            android:lineSpacingExtra="4dp"
+            android:lineSpacingExtra="5dp"
             android:text="@string/loren_ipsum"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

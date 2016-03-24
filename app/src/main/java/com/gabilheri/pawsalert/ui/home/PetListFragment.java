@@ -115,6 +115,7 @@ import timber.log.Timber;
                         .getFirstInBackground(new GetCallback<AnimalShelter>() {
                             @Override
                             public void done(AnimalShelter object, ParseException e) {
+                                mAnimalShelter = object.fromParseObject(object);
                                 queryData();
                             }
                         });
@@ -131,26 +132,7 @@ import timber.log.Timber;
     @SuppressWarnings("unchecked")
     public void queryData() {
         mPetAdapter.clear();
-        if (mPetListType == FRAGMENT_FAVORITE) {
-            Favorite.getQuery()
-                    .orderByDescending("createdAt")
-                    .include("animal")
-                    .include("user")
-                    .findInBackground(new FindCallback<Favorite>() {
-                @Override
-                public void done(List<Favorite> objects, ParseException e) {
-                    for(Favorite o : objects) {
-                        o = o.fromParseObject(o);
-                        Animal an = o.getAnimal();
-                        an = an.fromParseObject(an);
-                        an.setFavorite(true);
-                        mPetAdapter.add(an);
-                    }
-                }
-            });
-        } else {
-            getQuery().findInBackground(this);
-        }
+        getQuery().findInBackground(this);
     }
 
     public void queryIdList(@NonNull List<String> petIds) {
