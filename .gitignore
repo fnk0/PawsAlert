@@ -1,3 +1,4 @@
+/app/src/main/java/com/gabilheri/pawsalert/helpers/Keys.java
 *.iml
 .gradle
 /local.properties
