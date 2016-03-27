@@ -11,13 +11,12 @@ import android.view.View;
 import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.base.BaseDrawerActivity;
 import com.gabilheri.pawsalert.base.ItemCallback;
+import com.gabilheri.pawsalert.data.queryManagers.AnimalShelterListManager;
 import com.gabilheri.pawsalert.data.models.AnimalShelter;
 import com.gabilheri.pawsalert.data.models.TransitionWrapperModel;
 import com.gabilheri.pawsalert.data.models.User;
 import com.gabilheri.pawsalert.helpers.Const;
 import com.gabilheri.pawsalert.ui.animations.BangAnimationView;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -32,7 +31,7 @@ import butterknife.Bind;
  * @since 3/9/16.
  */
 public class ActivityShelters extends BaseDrawerActivity implements ItemCallback<TransitionWrapperModel<AnimalShelter>>,
-        FindCallback<AnimalShelter>, View.OnClickListener {
+        AnimalShelterListManager.AnimalShelterListCallback, View.OnClickListener {
 
     public static final int ADD_SHELTER = 9862;
     public static final int VIEW_SHELTER = 730;
@@ -43,6 +42,7 @@ public class ActivityShelters extends BaseDrawerActivity implements ItemCallback
     RecyclerView mRecyclerView;
 
     ShelterAdapter mShelterAdapter;
+    AnimalShelterListManager mAnimalShelterListManager;
     User mCurrentUser;
     boolean hasAnimalShelter = false;
     protected BangAnimationView mBangAnimationView;
@@ -52,13 +52,18 @@ public class ActivityShelters extends BaseDrawerActivity implements ItemCallback
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.shelters));
         mNavigationView.setCheckedItem(R.id.shelter);
+
+        mAnimalShelterListManager = new AnimalShelterListManager(this);
+
         mShelterAdapter = new ShelterAdapter(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mShelterAdapter);
+
         mCurrentUser = (User) ParseUser.getCurrentUser();
         enableFab(mCurrentUser != null, this);
         mBangAnimationView = BangAnimationView.attach2Window(this);
-        queryData();
+
+        mAnimalShelterListManager.getAnimalShelters();
     }
 
     @Override
@@ -106,32 +111,26 @@ public class ActivityShelters extends BaseDrawerActivity implements ItemCallback
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == ADD_SHELTER) {
-                queryData();
+                mAnimalShelterListManager.getAnimalShelters();
             }
         }
     }
 
-    public void queryData() {
-        AnimalShelter.getQuery()
-                .include("owner")
-                .findInBackground(this);
-    }
-
     @Override
-    public void done(List<AnimalShelter> objects, ParseException e) {
-        for(int i = 0; i < objects.size(); i++) {
-            AnimalShelter as = objects.get(i);
-            as = as.fromParseObject(as);
-
+    public void onAnimalShelterList(List<AnimalShelter> animalShelters) {
+        for(AnimalShelter as : animalShelters) {
             if (as.getOwner() != null && mCurrentUser != null) {
                 if (as.getOwner().getObjectId().equals(mCurrentUser.getObjectId())) {
                     hasAnimalShelter = true;
                 }
             }
-
-            objects.set(i, as);
         }
-        mShelterAdapter.addAll(objects);
+        mShelterAdapter.addAll(animalShelters);
+    }
+
+    @Override
+    public void onErrorFetchingAnimalShelters(Exception ex) {
+        showSnackbar("Error fetching animal shelters. Please try again later.");
     }
 
     @Override

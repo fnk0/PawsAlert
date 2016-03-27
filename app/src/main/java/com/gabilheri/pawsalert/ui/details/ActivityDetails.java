@@ -22,6 +22,7 @@ import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.base.BaseActivity;
 import com.gabilheri.pawsalert.data.models.Animal;
 import com.gabilheri.pawsalert.data.models.User;
+import com.gabilheri.pawsalert.data.queryManagers.AnimalManager;
 import com.gabilheri.pawsalert.helpers.Const;
 import com.gabilheri.pawsalert.ui.widgets.FlipAnimation;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -34,12 +35,8 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.parse.GetCallback;
-import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -57,7 +54,7 @@ import timber.log.Timber;
  * @since 3/8/16.
  */
 public class ActivityDetails extends BaseActivity
-        implements GetCallback<Animal>, OnMapReadyCallback {
+        implements AnimalManager.AnimalCallback, AnimalManager.SaveAnimalCallback, OnMapReadyCallback {
 
     int PLACE_PICKER_REQUEST = 1498;
 
@@ -143,6 +140,8 @@ public class ActivityDetails extends BaseActivity
     FlipAnimation fowardAnimation;
     FlipAnimation backAnimation;
 
+    AnimalManager mAnimalManager;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,6 +153,8 @@ public class ActivityDetails extends BaseActivity
         backAnimation = new FlipAnimation(mFabDone, mFab);
         mFabDone.setVisibility(View.GONE);
         backAnimation.reverse();
+
+        mAnimalManager = new AnimalManager(this, this);
 
         if (extras != null) {
             pObjectID = extras.getString(Const.OBJECT_ID);
@@ -181,24 +182,16 @@ public class ActivityDetails extends BaseActivity
             }
         }
 
-        queryAnimal();
+        mAnimalManager.queryAnimal(pObjectID);
+        mMapView.onCreate(null);
+        mMapView.getMapAsync(this);
     }
 
     @OnCheckedChanged(R.id.disableListing)
     public void enableDisableListing() {
         mAnimal.setDisabled(mDisableListing.isChecked());
-        mAnimal.toParseObject(mAnimal);
+        mAnimal.toParseObject();
         mAnimal.saveInBackground();
-    }
-
-    public void queryAnimal() {
-        if (pObjectID != null) {
-            ParseQuery<Animal> query = Animal.getQuery();
-            query.include("user");
-            query.getInBackground(pObjectID, this);
-            mMapView.onCreate(null);
-            mMapView.getMapAsync(this);
-        }
     }
 
     public void changeFabIcon() {
@@ -216,7 +209,6 @@ public class ActivityDetails extends BaseActivity
             mFab.startAnimation(fowardAnimation);
             mFabDone.startAnimation(fowardAnimation);
         }
-
     }
 
     @OnClick(R.id.fabDone)
@@ -253,17 +245,7 @@ public class ActivityDetails extends BaseActivity
                 mAnimal.setLongitude(mSelectedLocation.longitude);
             }
             showProgressDialog(null, "Updating pet listing...");
-            mAnimal.toParseObject(mAnimal);
-            mAnimal.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    dismissDialog();
-                    if (e == null) {
-                        updateAnimal();
-                        showSnackbar("Successfully updated pet listing.");
-                    }
-                }
-            });
+            mAnimalManager.saveAnimal(mAnimal);
         }
 
         // change views to edit mode
@@ -300,9 +282,27 @@ public class ActivityDetails extends BaseActivity
     }
 
     @Override
-    public void done(Animal object, ParseException e) {
-        mAnimal = object.fromParseObject(object);
+    public void onAnimalFetched(Animal animal) {
+        mAnimal = animal;
         updateAnimal();
+    }
+
+    @Override
+    public void onErrorFetchingAnimal(Exception ex) {
+        showSnackbar("Error fetching animal. Please try again later.");
+    }
+
+    @Override
+    public void onAnimalSaved() {
+        dismissDialog();
+        updateAnimal();
+        showSnackbar("Successfully updated pet listing.");
+    }
+
+    @Override
+    public void onErrorSavingAnimal(Exception e) {
+        dismissDialog();
+        showSnackbar("Error updating pet. Please try again.");
     }
 
     public void updateAnimal() {

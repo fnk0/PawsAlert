@@ -134,7 +134,7 @@ public class HomeActivity extends BaseDrawerPagerActivity
 
         if (objects != null) {
             for(Animal a : objects) {
-                mItems.add(a.fromParseObject(a));
+                mItems.add(a.fromParseObject());
             }
             initMap();
         }

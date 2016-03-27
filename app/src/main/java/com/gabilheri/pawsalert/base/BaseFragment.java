@@ -1,5 +1,6 @@
 package com.gabilheri.pawsalert.base;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by <a href="mailto:marcusandreog@gmail.com">Marcus Gabilheri</a>
@@ -21,12 +21,6 @@ import rx.subscriptions.CompositeSubscription;
  * @since 1/17/16.
  */
 public abstract class BaseFragment extends Fragment {
-
-    protected CompositeSubscription mCompositeSubscription;
-
-    public BaseFragment() {
-        mCompositeSubscription = new CompositeSubscription();
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -75,7 +69,6 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mCompositeSubscription.unsubscribe();
     }
 
     @Override
@@ -93,5 +86,12 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+    }
+
+    public void showSnackbar(String message) {
+        Activity a = getActivity();
+        if (a != null && a instanceof BaseActivity) {
+            ((BaseActivity)getActivity()).showSnackbar(message);
+        }
     }
 }

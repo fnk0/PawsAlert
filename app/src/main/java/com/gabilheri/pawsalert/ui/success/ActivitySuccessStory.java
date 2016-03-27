@@ -116,7 +116,7 @@ public class ActivitySuccessStory extends BaseDrawerActivity
     public void done(List<SuccessStory> objects, ParseException e) {
         mStoryAdapter.clear();
         for(SuccessStory ss : objects) {
-            ss = ss.fromParseObject(ss);
+            ss = ss.fromParseObject();
             mStoryAdapter.add(ss);
         }
     }

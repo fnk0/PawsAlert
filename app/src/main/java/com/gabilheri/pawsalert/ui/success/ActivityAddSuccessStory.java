@@ -116,7 +116,7 @@ public class ActivityAddSuccessStory extends BaseActivity {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    mSuccessStory.toParseObject(mSuccessStory);
+                    mSuccessStory.toParseObject();
                     mSuccessStory.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {

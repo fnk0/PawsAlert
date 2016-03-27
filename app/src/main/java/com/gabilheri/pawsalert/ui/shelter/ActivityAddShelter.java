@@ -220,7 +220,7 @@ public class ActivityAddShelter extends BaseActivity
         file.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                mAnimalShelter.toParseObject(mAnimalShelter);
+                mAnimalShelter.toParseObject();
                 mAnimalShelter.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {

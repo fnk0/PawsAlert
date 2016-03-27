@@ -69,7 +69,7 @@ public class ActivitySuccessDetail extends BaseActivity implements GetCallback<S
 
     @Override
     public void done(SuccessStory object, ParseException e) {
-        mSuccessStory = object.fromParseObject(object);
+        mSuccessStory = object.fromParseObject();
         String name = mSuccessStory.getUser().getFirstName() + " " + mSuccessStory.getUser().getLastName();
 
         mCollapsingToolbarLayout.setTitle(mSuccessStory.getTitle());

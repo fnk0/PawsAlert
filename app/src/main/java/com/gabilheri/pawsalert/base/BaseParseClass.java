@@ -1,7 +1,5 @@
 package com.gabilheri.pawsalert.base;
 
-import android.os.Bundle;
-
 import com.parse.ParseObject;
 
 import java.lang.reflect.Field;
@@ -19,7 +17,7 @@ public abstract class BaseParseClass<T> extends ParseObject {
 
     public abstract T instance();
 
-    public T fromParseObject(ParseObject po) {
+    public T fromParseObject() {
         T obj = instance();
         Field[] fields = getClass().getDeclaredFields();
         for (Field f : fields) {
@@ -28,7 +26,7 @@ public abstract class BaseParseClass<T> extends ParseObject {
             }
             f.setAccessible(true);
             try {
-                Object oj = po.get(f.getName());
+                Object oj = this.get(f.getName());
                 if (oj != null) {
                     f.set(obj, oj);
                 }
@@ -40,11 +38,11 @@ public abstract class BaseParseClass<T> extends ParseObject {
         return obj;
     }
 
-    public BaseParseClass<T> toParseObject(Object obj) {
-        for (Field f : obj.getClass().getDeclaredFields()) {
+    public BaseParseClass<T> toParseObject() {
+        for (Field f : getClass().getDeclaredFields()) {
             f.setAccessible(true);
             try {
-                Object val = f.get(obj);
+                Object val = f.get(this);
                 if (val != null) {
                     put(f.getName(), val);
                 }
@@ -53,10 +51,6 @@ public abstract class BaseParseClass<T> extends ParseObject {
             }
         }
         return this;
-    }
-
-    public boolean isTweetApiObj(Object obj) {
-        return (obj instanceof String) || (obj instanceof Bundle);
     }
 
     public static void LogFieldException(Exception ex, Field f) {

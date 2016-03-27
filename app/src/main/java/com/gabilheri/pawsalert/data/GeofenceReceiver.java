@@ -94,7 +94,7 @@ public class GeofenceReceiver extends WakefulBroadcastReceiver implements FindCa
             int counter = 0;
             ArrayList<String> objectIds = new ArrayList<>();
             for(Animal a : objects) {
-                Animal animal = a.fromParseObject(a);
+                Animal animal = a.fromParseObject();
 
                 objectIds.add(animal.getObjectId());
 

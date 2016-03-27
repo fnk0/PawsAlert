@@ -19,6 +19,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.base.BaseActivity;
 import com.gabilheri.pawsalert.data.models.AnimalShelter;
+import com.gabilheri.pawsalert.data.queryManagers.AnimalShelterManager;
 import com.gabilheri.pawsalert.helpers.Const;
 import com.gabilheri.pawsalert.helpers.Keys;
 import com.gabilheri.pawsalert.ui.home.PetListFragment;
@@ -28,9 +29,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
@@ -57,7 +55,7 @@ import timber.log.Timber;
  * @since 3/12/16.
  */
 public class ActivityShelterDetails extends BaseActivity
-        implements GetCallback<AnimalShelter>, OnMapReadyCallback, View.OnClickListener {
+        implements AnimalShelterManager.AnimalShelterCallback, OnMapReadyCallback, View.OnClickListener {
 
     @Bind(R.id.shelterImage)
     AppCompatImageView mShelterImageIV;
@@ -112,6 +110,8 @@ public class ActivityShelterDetails extends BaseActivity
     MaterialDialog mDonateDialog;
     BigDecimal mDonateAmount;
 
+    AnimalShelterManager mAnimalShelterManager;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,15 +124,15 @@ public class ActivityShelterDetails extends BaseActivity
         mActionWeb.setOnClickListener(this);
         mActionDonate.setOnClickListener(this);
 
+        mAnimalShelterManager = new AnimalShelterManager(this);
+
         if (extras != null) {
             pObjectID = extras.getString(Const.OBJECT_ID);
 
             String pictureUrl = extras.getString(Const.IMAGE_EXTRA);
             loadImage(pictureUrl, mShelterImageIV);
 
-            ParseQuery<AnimalShelter> query = AnimalShelter.getQuery();
-            query.include("owner");
-            query.getInBackground(pObjectID, this);
+            mAnimalShelterManager.getAnimalShelter(pObjectID);
 
             mPayPalConfiguration = new PayPalConfiguration()
                     .merchantName(getString(R.string.app_name))
@@ -316,9 +316,9 @@ public class ActivityShelterDetails extends BaseActivity
     }
 
     @Override
-    public void done(AnimalShelter object, ParseException e) {
-        mAnimalShelter = object;
-        mAnimalShelter = mAnimalShelter.fromParseObject(mAnimalShelter);
+    public void onAnimalShelter(AnimalShelter animalShelter) {
+        mAnimalShelter = animalShelter;
+        mAnimalShelter = mAnimalShelter.fromParseObject();
         mLocationTV.setText(mAnimalShelter.getAddress());
         mCollapsingToolbarLayout.setTitle(mAnimalShelter.getShelterName());
         mShelterHours.setText(String.format(
@@ -326,6 +326,11 @@ public class ActivityShelterDetails extends BaseActivity
         mDetailsTitleTV.setText(getString(R.string.about));
         mDetailsTV.setText(mAnimalShelter.getShelterDescription());
         setLocation();
+    }
+
+    @Override
+    public void onErrorFetchingAnimalShelter(Exception ex) {
+        showSnackbar("Error fetching animal shelter. Please try again later.");
     }
 
     @Override

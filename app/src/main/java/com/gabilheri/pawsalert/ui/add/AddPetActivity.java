@@ -18,6 +18,8 @@ import com.gabilheri.pawsalert.base.BaseActivity;
 import com.gabilheri.pawsalert.data.models.Animal;
 import com.gabilheri.pawsalert.data.models.AnimalShelter;
 import com.gabilheri.pawsalert.data.models.User;
+import com.gabilheri.pawsalert.data.queryManagers.AnimalManager;
+import com.gabilheri.pawsalert.data.queryManagers.AnimalShelterManager;
 import com.gabilheri.pawsalert.helpers.Const;
 import com.gabilheri.pawsalert.helpers.FileUriUtils;
 import com.gabilheri.pawsalert.helpers.PictureUtils;
@@ -34,7 +36,6 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -57,7 +58,8 @@ import timber.log.Timber;
  * @since 1/20/16.
  */
 public class AddPetActivity extends BaseActivity
-        implements OnMapReadyCallback, RadioGroup.OnCheckedChangeListener, OnImageRemovedCallback {
+        implements OnMapReadyCallback, RadioGroup.OnCheckedChangeListener, OnImageRemovedCallback,
+        AnimalShelterManager.AnimalShelterCallback, AnimalManager.SaveAnimalCallback, SaveCallback {
 
     int PLACE_PICKER_REQUEST = 1498;
     int PHOTO_PICKER_REQUEST = 1499;
@@ -116,6 +118,8 @@ public class AddPetActivity extends BaseActivity
     int mUploaded = 0;
     Animal mAnimal;
     AnimalShelter mAnimalShelter;
+    AnimalManager mAnimalManager;
+    AnimalShelterManager mAnimalShelterManager;
     User mCurrentUser;
     HashMap<String, AddImageLayout> mPhotos;
 
@@ -124,20 +128,16 @@ public class AddPetActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         enableBackNav();
         enableActivityTransition();
+
+        mAnimalManager = new AnimalManager(this);
+        mAnimalShelterManager = new AnimalShelterManager(this);
+
         mPetNameEditText.setHint(R.string.pet_name);
         mPhotos = new HashMap<>();
         mSegmentMissing.setOnCheckedChangeListener(this);
         mCurrentUser = (User) ParseUser.getCurrentUser();
-        AnimalShelter.getQuery()
-                .whereEqualTo("owner", mCurrentUser)
-                .getFirstInBackground(new GetCallback<AnimalShelter>() {
-                    @Override
-                    public void done(AnimalShelter object, ParseException e) {
-                        if (e == null && object != null) {
-                            mAnimalShelter = object.fromParseObject(object);
-                        }
-                    }
-                });
+
+        mAnimalShelterManager.getAnimalShelter(mCurrentUser);
     }
 
     @OnClick(R.id.selectLocation)
@@ -320,30 +320,44 @@ public class AddPetActivity extends BaseActivity
         for (Map.Entry<String, AddImageLayout> s : mPhotos.entrySet()) {
             ParseFile file = PictureUtils.getParseFileFromPath(s.getKey(), mAnimal.getName(), String.valueOf(mUploaded));
             mAnimal.addPhoto(file);
-            file.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    Timber.d("Uploaded file...");
-                    mUploaded++;
-                    if (mUploaded == mPhotos.size()) {
-                        mAnimal.toParseObject(mAnimal);
-                        mAnimal.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                dismissDialog();
-                                if (e != null) {
-                                    Timber.e(e, "Could not save object!");
-                                    showSnackbar("Error creating pet listing. Try again later.");
-                                } else {
-                                    Timber.d("Successfully saved pet");
-                                    setResult(RESULT_OK);
-                                    finish();
-                                }
-                            }
-                        });
-                    }
-                }
-            });
+            file.saveInBackground(this);
         }
+    }
+
+    @Override
+    public void onAnimalShelter(AnimalShelter animalShelter) {
+        mAnimalShelter = animalShelter.fromParseObject();
+    }
+
+    @Override
+    public void onErrorFetchingAnimalShelter(Exception ex) {
+
+    }
+
+    @Override
+    public void onAnimalSaved() {
+        dismissDialog();
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public void onErrorSavingAnimal(Exception e) {
+        dismissDialog();
+        showSnackbar("Error creating pet listing. Try again later.");
+    }
+
+    @Override
+    public void done(ParseException e) {
+        mUploaded++;
+        if (e == null) {
+            if (mUploaded == mPhotos.size()) {
+                mAnimalManager.saveAnimal(mAnimal);
+            }
+        } else {
+            Timber.e(e, "Error saving image: " + e.getLocalizedMessage());
+            showSnackbar("Error saving image. Please try again later.");
+        }
+
     }
 }

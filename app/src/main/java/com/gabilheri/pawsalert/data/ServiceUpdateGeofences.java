@@ -55,7 +55,7 @@ public class ServiceUpdateGeofences extends IntentService
 
             float radius = PrefManager.with(this).getFloat("notification_range", 1f) * MILE;
             for (Animal a : animals) {
-                a = a.fromParseObject(a);
+                a = a.fromParseObject();
                 Geofence geofence = new Geofence.Builder()
                         .setCircularRegion(a.getLatitude(), a.getLongitude(), radius)
                         .setRequestId(a.getObjectId()) // every fence must have an ID
