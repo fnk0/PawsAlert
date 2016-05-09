@@ -80,5 +80,7 @@
         The technology used to provide this kind of information is called Geofences.
     </string>
     <string name="forgot_password">Forgot password?</string>
+    <string name="found">Found</string>
+    <string name="map">MAP</string>
 
 </resources>

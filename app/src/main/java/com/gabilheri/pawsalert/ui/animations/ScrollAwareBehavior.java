@@ -43,6 +43,5 @@ public class ScrollAwareBehavior extends FloatingActionButton.Behavior {
         } else if (dyConsumed < 0) {
             child.animate().translationY(0).setInterpolator(new LinearInterpolator()).start();
         }
-
     }
 }

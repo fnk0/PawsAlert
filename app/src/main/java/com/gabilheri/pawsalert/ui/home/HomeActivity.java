@@ -10,7 +10,6 @@ import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.base.BaseDrawerPagerActivity;
 import com.gabilheri.pawsalert.base.PrefManager;
 import com.gabilheri.pawsalert.data.GeofencesAlarm;
-import com.gabilheri.pawsalert.data.ServiceUpdateGeofences;
 import com.gabilheri.pawsalert.data.models.Animal;
 import com.gabilheri.pawsalert.helpers.Const;
 import com.gabilheri.pawsalert.ui.add.AddPetActivity;
@@ -49,8 +48,7 @@ public class HomeActivity extends BaseDrawerPagerActivity
     public static final int ADD_PET = 100;
 
     PetListFragment mMissingFragment;
-    PetListFragment mAdoptFragment;
-//    PetListFragment mFavoritesFragment;
+    PetListFragment mFoundFragment;
 
     GoogleMap mGoogleMap;
     MapFragment mMapFragment;
@@ -73,20 +71,15 @@ public class HomeActivity extends BaseDrawerPagerActivity
             PrefManager.with(this).save(Const.SERVICE_STARTED, true);
         }
 
-        float radius = PrefManager.with(this).getFloat("notification_range", 1f) * ServiceUpdateGeofences.MILE;
-        Timber.d("Radius: " + radius);
-
         mMissingFragment = PetListFragment.newInstance(PetListFragment.FRAGMENT_MISSING, null);
-        mAdoptFragment = PetListFragment.newInstance(PetListFragment.FRAGMENT_ADOPT, null);
-//        mFavoritesFragment = PetListFragment.newInstance(PetListFragment.FRAGMENT_FAVORITE, null);
+        mFoundFragment = PetListFragment.newInstance(PetListFragment.FRAGMENT_FOUND, null);
 
         mMapFragment = MapFragment.newInstance();
         mMapFragment.getMapAsync(this);
 
         addFragment(getString(R.string.missing), mMissingFragment);
-        addFragment(getString(R.string.adopt), mAdoptFragment);
-//        addFragment(getString(R.string.favorites), mFavoritesFragment);
-        addFragment("MAP", mMapFragment);
+        addFragment(getString(R.string.found), mFoundFragment);
+        addFragment(getString(R.string.map), mMapFragment);
 
         super.initPager();
         mNavigationView.setCheckedItem(R.id.home);
@@ -202,7 +195,7 @@ public class HomeActivity extends BaseDrawerPagerActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             mMissingFragment.queryData();
-            mAdoptFragment.queryData();
+            mFoundFragment.queryData();
         }
     }
 }

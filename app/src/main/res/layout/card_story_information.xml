@@ -63,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -87,36 +88,36 @@
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
-        <info.hoang8f.android.segmented.SegmentedGroup
-            android:id="@+id/segmentFoundAdopted"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:orientation="horizontal"
-            app:sc_tint_color="@color/teal_300"
-            >
-            <RadioButton
-                android:id="@+id/found"
-                android:text="Found my Pet"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:checked="true"
-                android:padding="8dp"
-                style="@style/RadioButton"
-                />
+        <!--<info.hoang8f.android.segmented.SegmentedGroup-->
+            <!--android:id="@+id/segmentFoundAdopted"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="16dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--app:sc_tint_color="@color/teal_300"-->
+            <!--&gt;-->
+            <!--<RadioButton-->
+                <!--android:id="@+id/found"-->
+                <!--android:text="Found my Pet"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:checked="true"-->
+                <!--android:padding="8dp"-->
+                <!--style="@style/RadioButton"-->
+                <!--/>-->
 
-            <RadioButton
-                android:id="@+id/adopted"
-                android:text="Adopted a Pet"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:padding="8dp"
-                style="@style/RadioButton"
-                />
+            <!--<RadioButton-->
+                <!--android:id="@+id/adopted"-->
+                <!--android:text="Adopted a Pet"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:padding="8dp"-->
+                <!--style="@style/RadioButton"-->
+                <!--/>-->
 
-        </info.hoang8f.android.segmented.SegmentedGroup>
+        <!--</info.hoang8f.android.segmented.SegmentedGroup>-->
 
     </LinearLayout>
 

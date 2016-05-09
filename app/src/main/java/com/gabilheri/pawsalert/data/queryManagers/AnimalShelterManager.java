@@ -46,7 +46,7 @@ public class AnimalShelterManager implements GetCallback<AnimalShelter> {
     @Override
     public void done(AnimalShelter object, ParseException e) {
         if (mAnimalShelterCallback != null) {
-            if (e == null) {
+            if (e != null) {
                 mAnimalShelterCallback.onErrorFetchingAnimalShelter(e);
             }
             if (object != null) {

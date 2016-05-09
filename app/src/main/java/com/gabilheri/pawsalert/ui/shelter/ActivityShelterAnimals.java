@@ -25,7 +25,7 @@ public class ActivityShelterAnimals extends BaseActivity {
 
         if (extras != null) {
             String shelterId = extras.getString(PetListFragment.SHELTER_ID);
-            mPetListFragment = PetListFragment.newInstance(PetListFragment.FRAGMENT_ADOPT, shelterId);
+            mPetListFragment = PetListFragment.newInstance(PetListFragment.FRAGMENT_FOUND, shelterId);
             addFragmentToContainer(mPetListFragment, "PetListFragment");
         }
     }

@@ -24,7 +24,6 @@ import com.parse.SaveCallback;
 import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-import info.hoang8f.android.segmented.SegmentedGroup;
 import timber.log.Timber;
 
 /**
@@ -49,9 +48,6 @@ public class ActivityAddSuccessStory extends BaseActivity {
 
     @Bind(R.id.storyPet)
     AppCompatEditText mStoryPetET;
-
-    @Bind(R.id.segmentFoundAdopted)
-    SegmentedGroup mSegmentFoundAdopted;
 
     @Bind(R.id.storyDescription)
     AppCompatEditText mStoryET;
@@ -103,7 +99,7 @@ public class ActivityAddSuccessStory extends BaseActivity {
         mSuccessStory.setPetName(mStoryPetET.getText().toString());
         mSuccessStory.setStory(mStoryET.getText().toString());
         mSuccessStory.setUser(mCurrentUser);
-        mSuccessStory.setAdoptionStory(mSegmentFoundAdopted.getCheckedRadioButtonId() == R.id.adopted);
+        mSuccessStory.setAdoptionStory(false);
 
         showProgressDialog("Creating Success Story...", null);
 

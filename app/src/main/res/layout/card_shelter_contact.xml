@@ -25,7 +25,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/actionDonate"
+                android:id="@+id/actionCall"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -36,7 +36,7 @@
                 <android.support.v7.widget.AppCompatImageView
                     android:layout_width="34dp"
                     android:layout_height="34dp"
-                    android:src="@drawable/ic_money"
+                    android:src="@drawable/ic_call"
                     android:tint="@color/primary" />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:textAllCaps="true"
-                    android:text="Donate"
+                    android:text="Call"
                     android:textColor="@color/primary"
                     android:textSize="18sp" />
 

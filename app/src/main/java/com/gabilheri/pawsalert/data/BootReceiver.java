@@ -21,7 +21,4 @@ public class BootReceiver extends BroadcastReceiver {
             canopeoAlarm.setAlarm(context);
         }
     }
-
-
-
 }

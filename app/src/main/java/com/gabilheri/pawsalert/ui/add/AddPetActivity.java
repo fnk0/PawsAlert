@@ -3,7 +3,6 @@ package com.gabilheri.pawsalert.ui.add;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.SwitchCompat;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import com.gabilheri.pawsalert.R;
 import com.gabilheri.pawsalert.base.BaseActivity;
@@ -58,7 +56,7 @@ import timber.log.Timber;
  * @since 1/20/16.
  */
 public class AddPetActivity extends BaseActivity
-        implements OnMapReadyCallback, RadioGroup.OnCheckedChangeListener, OnImageRemovedCallback,
+        implements OnMapReadyCallback, OnImageRemovedCallback,
         AnimalShelterManager.AnimalShelterCallback, AnimalManager.SaveAnimalCallback, SaveCallback {
 
     int PLACE_PICKER_REQUEST = 1498;
@@ -106,12 +104,6 @@ public class AddPetActivity extends BaseActivity
     @Bind(R.id.photosLayout)
     LinearLayout mPhotosLayout;
 
-    @Bind(R.id.adoptionFeeLayout)
-    TextInputLayout mAdoptionFeeLayout;
-
-    @Bind(R.id.adoptionFee)
-    AppCompatEditText mAdoptionFeeEditText;
-
     LinearLayout mLastLayout;
     LatLng mSelectedLocation;
 
@@ -134,7 +126,6 @@ public class AddPetActivity extends BaseActivity
 
         mPetNameEditText.setHint(R.string.pet_name);
         mPhotos = new HashMap<>();
-        mSegmentMissing.setOnCheckedChangeListener(this);
         mCurrentUser = (User) ParseUser.getCurrentUser();
 
         mAnimalShelterManager.getAnimalShelter(mCurrentUser);
@@ -178,13 +169,6 @@ public class AddPetActivity extends BaseActivity
         for (int i = 0; i < count; i++) {
             View v = viewGroup.getChildAt(i);
             viewGroup.removeView(v);
-        }
-    }
-
-    @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-        if (group.getId() == R.id.segment_missing) {
-            mAdoptionFeeLayout.setVisibility(checkedId == R.id.adopt ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -304,10 +288,6 @@ public class AddPetActivity extends BaseActivity
 
         if (mAnimalShelter != null) {
             mAnimal.setAnimalShelter(mAnimalShelter);
-        }
-
-        if (mAdoptionFeeLayout.getVisibility() == View.VISIBLE) {
-            mAnimal.setAdoptionFee(mAdoptionFeeEditText.getText().toString());
         }
 
         if (mPhotos.size() == 0) {

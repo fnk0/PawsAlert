@@ -40,10 +40,10 @@ import java.util.List;
     public static final String SHELTER_ID = "com.gabilheri.paws.shelterID";
     public static final String USER_ID = "com.gabilheri.paws.userID";
 
-    public static final int FRAGMENT_ADOPT = 100;
+    public static final int FRAGMENT_FOUND = 100;
     public static final int FRAGMENT_MISSING = 101;
 
-    @IntDef({FRAGMENT_ADOPT, FRAGMENT_MISSING})
+    @IntDef({FRAGMENT_FOUND, FRAGMENT_MISSING})
     public @interface PetListType {}
 
     PetAdapter mPetAdapter;

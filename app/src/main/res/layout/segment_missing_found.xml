@@ -31,30 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/adopt" />
+            android:text="@string/found" />
     </info.hoang8f.android.segmented.SegmentedGroup>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/adoptionFeeLayout"
-        android:visibility="gone"
-        android:padding="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/adoptionFee"
-            android:hint="@string/adoption_fee"
-            android:drawableLeft="@drawable/ic_money"
-            android:drawablePadding="16dp"
-            android:background="@android:color/transparent"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:textSize="20sp"
-            android:inputType="number"
-            android:layout_marginBottom="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>

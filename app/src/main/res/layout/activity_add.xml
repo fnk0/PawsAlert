@@ -41,7 +41,7 @@
                     android:orientation="vertical"
                     android:showDividers="middle">
 
-                    <include layout="@layout/segment_missing_adopt"/>
+                    <include layout="@layout/segment_missing_found"/>
 
                     <include layout="@layout/segment_gender"/>
 
