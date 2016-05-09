@@ -7,3 +7,5 @@ The application was developed and designed by [Marcus Gabilheri](mailto:marcus@g
 [See application screenshots](https://github.com/fnk0/PawsAlert/tree/master/screenshots)
 
 To compile the application you need a Parse and a Google Maps key.
+
+[See website: http://www.stillwaterpaws.com/](http://www.stillwaterpaws.com/)
